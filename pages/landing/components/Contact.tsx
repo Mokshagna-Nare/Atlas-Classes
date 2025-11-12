@@ -1,7 +1,20 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 
 const Contact: React.FC = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert("Thank you for your message! We will get back to you shortly.");
+    setName('');
+    setEmail('');
+    setPhone('');
+    setMessage('');
+  };
+
   return (
     <section className="py-20 bg-atlas-black">
       <div className="container mx-auto px-6">
@@ -11,11 +24,11 @@ const Contact: React.FC = () => {
         </div>
         <div className="grid md:grid-cols-2 gap-10 items-start">
           <div>
-            <form className="space-y-4">
-              <input type="text" placeholder="Your Name" className="w-full p-3 bg-atlas-gray border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-atlas-orange" />
-              <input type="email" placeholder="Your Email" className="w-full p-3 bg-atlas-gray border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-atlas-orange" />
-              <input type="tel" placeholder="Your Phone" className="w-full p-3 bg-atlas-gray border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-atlas-orange" />
-              <textarea placeholder="Your Message" rows={5} className="w-full p-3 bg-atlas-gray border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-atlas-orange"></textarea>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <input type="text" placeholder="Your Name" value={name} onChange={e => setName(e.target.value)} required className="w-full p-3 bg-atlas-gray border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-atlas-orange" />
+              <input type="email" placeholder="Your Email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full p-3 bg-atlas-gray border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-atlas-orange" />
+              <input type="tel" placeholder="Your Phone" value={phone} onChange={e => setPhone(e.target.value)} required className="w-full p-3 bg-atlas-gray border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-atlas-orange" />
+              <textarea placeholder="Your Message" rows={5} value={message} onChange={e => setMessage(e.target.value)} required className="w-full p-3 bg-atlas-gray border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-atlas-orange"></textarea>
               <button type="submit" className="w-full bg-atlas-orange text-white font-bold py-3 px-6 rounded-md hover:bg-orange-600 transition duration-300">
                 Send Message
               </button>

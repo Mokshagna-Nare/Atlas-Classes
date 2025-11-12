@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { HashRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { DataProvider } from './contexts/DataContext';
 import LandingPage from './pages/landing/LandingPage';
 import InstituteLogin from './pages/auth/InstituteLogin';
 import StudentLogin from './pages/auth/StudentLogin';
@@ -9,6 +11,7 @@ import StudentDashboard from './pages/dashboards/student/StudentDashboard';
 import InstituteSignup from './pages/auth/InstituteSignup';
 import StudentSignup from './pages/auth/StudentSignup';
 import { User } from './types';
+import TakeTestPage from './pages/dashboards/student/TakeTestPage';
 
 // Wrapper to protect routes
 const ProtectedRoute: React.FC<{ role: 'institute' | 'student' }> = ({ role }) => {
@@ -39,26 +42,29 @@ const ProtectedRoute: React.FC<{ role: 'institute' | 'student' }> = ({ role }) =
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login/institute" element={<InstituteLogin />} />
-          <Route path="/login/student" element={<StudentLogin />} />
-          <Route path="/signup/institute" element={<InstituteSignup />} />
-          <Route path="/signup/student" element={<StudentSignup />} />
-          
-          <Route element={<ProtectedRoute role="institute" />}>
-            <Route path="/dashboard/institute" element={<InstituteDashboard />} />
-          </Route>
-          
-          <Route element={<ProtectedRoute role="student" />}>
-            <Route path="/dashboard/student" element={<StudentDashboard />} />
-          </Route>
-          
-          {/* Redirect any other path to home */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
+      <DataProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login/institute" element={<InstituteLogin />} />
+            <Route path="/login/student" element={<StudentLogin />} />
+            <Route path="/signup/institute" element={<InstituteSignup />} />
+            <Route path="/signup/student" element={<StudentSignup />} />
+            
+            <Route element={<ProtectedRoute role="institute" />}>
+              <Route path="/dashboard/institute" element={<InstituteDashboard />} />
+            </Route>
+            
+            <Route element={<ProtectedRoute role="student" />}>
+              <Route path="/dashboard/student" element={<StudentDashboard />} />
+              <Route path="/dashboard/student/test/:testId" element={<TakeTestPage />} />
+            </Route>
+            
+            {/* Redirect any other path to home */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </DataProvider>
     </AuthProvider>
   );
 };

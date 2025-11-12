@@ -1,26 +1,45 @@
 
 import React, { useState } from 'react';
-import { STUDENT_TESTS } from '../../../../constants';
+import { useNavigate } from 'react-router-dom';
+import { useData } from '../../../../contexts/DataContext';
+import { useAuth } from '../../../../contexts/AuthContext';
 import { Test } from '../../../../types';
 
 type TestStatus = 'Upcoming' | 'Completed' | 'Assigned';
 
-const TestCard: React.FC<{ test: Test }> = ({ test }) => (
-    <div className="bg-atlas-gray p-4 rounded-lg flex justify-between items-center">
-        <div>
-            <p className="font-bold text-lg">{test.title}</p>
-            <p className="text-sm text-gray-400">Scheduled for: {test.date}</p>
+const TestCard: React.FC<{ test: Test }> = ({ test }) => {
+    const navigate = useNavigate();
+
+    const handleStartTest = () => {
+        navigate(`/dashboard/student/test/${test.id}`);
+    };
+
+    // This would ideally navigate to a specific result page
+    const handleViewResult = () => {
+        alert(`Navigating to results for ${test.title}. You can view all your results in the 'My Results' tab.`);
+    };
+
+    return (
+        <div className="bg-atlas-gray p-4 rounded-lg flex justify-between items-center">
+            <div>
+                <p className="font-bold text-lg">{test.title}</p>
+                <p className="text-sm text-gray-400">Scheduled for: {test.date}</p>
+            </div>
+            {test.status === 'Upcoming' && <button onClick={handleStartTest} className="bg-atlas-orange text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 transition">Start Test</button>}
+            {test.status === 'Completed' && <button onClick={handleViewResult} className="border border-atlas-orange text-atlas-orange font-bold py-2 px-4 rounded-md hover:bg-atlas-orange hover:text-white transition">View Result</button>}
+            {test.status === 'Assigned' && <p className="text-blue-400">Awaiting start date</p>}
         </div>
-        {test.status === 'Upcoming' && <button className="bg-atlas-orange text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 transition">Start Test</button>}
-        {test.status === 'Completed' && <button className="border border-atlas-orange text-atlas-orange font-bold py-2 px-4 rounded-md hover:bg-atlas-orange hover:text-white transition">View Result</button>}
-        {test.status === 'Assigned' && <p className="text-blue-400">Awaiting start date</p>}
-    </div>
-);
+    );
+};
 
 const Tests: React.FC = () => {
     const [activeTab, setActiveTab] = useState<TestStatus>('Upcoming');
+    const { tests } = useData();
+    const { user } = useAuth()!;
 
-    const filteredTests = STUDENT_TESTS.filter(test => test.status === activeTab);
+    // Filter tests for the specific institute
+    const instituteTests = tests.filter(test => test.instituteId === user?.instituteId);
+    const filteredTests = instituteTests.filter(test => test.status === activeTab);
 
     const TabButton: React.FC<{ status: TestStatus }> = ({ status }) => (
         <button

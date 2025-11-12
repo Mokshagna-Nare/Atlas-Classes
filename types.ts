@@ -42,6 +42,9 @@ export interface Test {
     title: string;
     date: string;
     status: 'Upcoming' | 'Completed' | 'Assigned';
+    instituteId: string;
+    subject: string;
+    pdfFileName?: string;
 }
 
 export interface TestResult {
@@ -58,4 +61,11 @@ export interface Payment {
     date: string;
     amount: number;
     status: 'Paid' | 'Due';
+}
+
+export interface Question {
+  question: string;
+  type: 'Multiple Choice' | 'Short Answer' | 'True/False';
+  options?: string[];
+  answer: string;
 }

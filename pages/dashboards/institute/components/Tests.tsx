@@ -1,39 +1,70 @@
-
-import React from 'react';
-import { STUDENT_TESTS } from '../../../../constants';
+import React, { useState } from 'react';
+import { useData } from '../../../../contexts/DataContext';
+import CreateTestModal from './CreateTestModal';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { Test } from '../../../../types';
 
 const Tests: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingTest, setEditingTest] = useState<Test | null>(null);
+  const { tests, deleteTest } = useData();
+  const { user } = useAuth()!;
+
+  // Filter tests for the specific institute
+  const instituteTests = tests.filter(test => test.instituteId === user?.id);
+
+  const handleOpenCreateModal = () => {
+    setEditingTest(null);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (test: Test) => {
+    setEditingTest(test);
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = (testId: string) => {
+    if (window.confirm('Are you sure you want to delete this test? This action cannot be undone.')) {
+        deleteTest(testId);
+    }
+  };
+
   return (
     <div>
         <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-atlas-orange">Manage Tests</h2>
-            <button className="bg-atlas-orange text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 transition">
+            <button onClick={handleOpenCreateModal} className="bg-atlas-orange text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 transition">
                 Create New Test
             </button>
         </div>
         <div className="bg-atlas-black p-4 rounded-lg">
-            <ul className="space-y-3">
-                {STUDENT_TESTS.map(test => (
-                    <li key={test.id} className="flex justify-between items-center p-3 bg-atlas-gray rounded-md">
-                        <div>
-                            <p className="font-bold">{test.title}</p>
-                            <p className="text-sm text-gray-400">Date: {test.date}</p>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                           <span className={`px-2 py-1 text-xs rounded-full ${
-                                test.status === 'Completed' ? 'bg-green-500/20 text-green-400' :
-                                test.status === 'Upcoming' ? 'bg-yellow-500/20 text-yellow-400' :
-                                'bg-blue-500/20 text-blue-400'
-                            }`}>
-                                {test.status}
-                            </span>
-                            <button className="text-gray-400 hover:text-white">Edit</button>
-                            <button className="text-red-500 hover:text-red-400">Delete</button>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+            {instituteTests.length > 0 ? (
+                <ul className="space-y-3">
+                    {instituteTests.map(test => (
+                        <li key={test.id} className="flex justify-between items-center p-3 bg-atlas-gray rounded-md">
+                            <div>
+                                <p className="font-bold">{test.title}</p>
+                                <p className="text-sm text-gray-400">Date: {test.date}</p>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                               <span className={`px-2 py-1 text-xs rounded-full ${
+                                    test.status === 'Completed' ? 'bg-green-500/20 text-green-400' :
+                                    test.status === 'Upcoming' ? 'bg-yellow-500/20 text-yellow-400' :
+                                    'bg-blue-500/20 text-blue-400'
+                                }`}>
+                                    {test.status}
+                                </span>
+                                <button onClick={() => handleOpenEditModal(test)} className="text-gray-400 hover:text-white text-sm">Edit</button>
+                                <button onClick={() => handleDelete(test.id)} className="text-red-500 hover:text-red-400 text-sm">Delete</button>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                 <p className="text-gray-500 text-center py-8">No tests created yet.</p>
+            )}
         </div>
+        {isModalOpen && <CreateTestModal testToEdit={editingTest} onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };

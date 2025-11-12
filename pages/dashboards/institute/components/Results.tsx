@@ -1,17 +1,21 @@
-
 import React from 'react';
 import { ALL_RESULTS, INSTITUTE_STUDENTS, STUDENT_TESTS } from '../../../../constants';
 
 const Results: React.FC = () => {
+
+    const handlePrint = () => {
+        window.print();
+    };
+
     return (
         <div>
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 print:hidden">
                 <h2 className="text-2xl font-bold text-atlas-orange">Student Results</h2>
-                <button className="bg-atlas-orange text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 transition">
+                <button onClick={handlePrint} className="bg-atlas-orange text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 transition">
                     Download All Results (PDF)
                 </button>
             </div>
-            <div className="overflow-x-auto bg-atlas-black rounded-lg">
+            <div id="printable-results" className="overflow-x-auto bg-atlas-black rounded-lg">
                 <table className="w-full text-left">
                     <thead className="border-b border-gray-700">
                         <tr>
@@ -47,6 +51,25 @@ const Results: React.FC = () => {
                     </tbody>
                 </table>
             </div>
+            <style>{`
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+                    #printable-results, #printable-results * {
+                        visibility: visible;
+                    }
+                    #printable-results {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                    }
+                    main {
+                        padding: 0 !important;
+                    }
+                }
+            `}</style>
         </div>
     );
 };

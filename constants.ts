@@ -69,10 +69,10 @@ export const INSTITUTE_STUDENTS: Student[] = [
 ];
 
 export const STUDENT_TESTS: Test[] = [
-    { id: 't1', title: 'Physics - Mechanics', date: '2024-09-15', status: 'Completed' },
-    { id: 't2', title: 'Chemistry - Organic', date: '2024-09-22', status: 'Completed' },
-    { id: 't3', title: 'Mathematics - Algebra', date: '2024-10-01', status: 'Assigned' },
-    { id: 't4', title: 'Biology - Cell Structure', date: '2024-10-10', status: 'Upcoming' },
+    { id: 't1', title: 'Physics - Mechanics', date: '2024-09-15', status: 'Completed', instituteId: 'i1', subject: 'Physics', pdfFileName: 'mechanics-test.pdf' },
+    { id: 't2', title: 'Chemistry - Organic', date: '2024-09-22', status: 'Completed', instituteId: 'i1', subject: 'Chemistry', pdfFileName: 'organic-chem-test.pdf' },
+    { id: 't3', title: 'Mathematics - Algebra', date: '2024-10-01', status: 'Assigned', instituteId: 'i1', subject: 'Mathematics', pdfFileName: 'algebra-test.pdf' },
+    { id: 't4', title: 'Biology - Cell Structure', date: '2024-10-10', status: 'Upcoming', instituteId: 'i1', subject: 'Biology', pdfFileName: 'biology-cell-test.pdf' },
 ];
 
 export const STUDENT_RESULTS: TestResult[] = [
@@ -80,7 +80,7 @@ export const STUDENT_RESULTS: TestResult[] = [
     { testId: 't2', studentId: 's1', score: 92, maxScore: 100, rank: 1, grade: 'A+' },
 ];
 
-export const ALL_RESULTS: TestResult[] = [
+export let ALL_RESULTS: TestResult[] = [
     { testId: 't1', studentId: 's1', score: 85, maxScore: 100, rank: 3, grade: 'A' },
     { testId: 't1', studentId: 's2', score: 78, maxScore: 100, rank: 4, grade: 'B' },
     { testId: 't1', studentId: 's3', score: 91, maxScore: 100, rank: 1, grade: 'A+' },

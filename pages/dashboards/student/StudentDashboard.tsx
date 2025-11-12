@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -16,8 +15,10 @@ const StudentDashboard: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
     navigate('/');
+    // Use a small timeout to ensure navigation starts before auth state is cleared,
+    // preventing the ProtectedRoute from redirecting to login.
+    setTimeout(logout, 50);
   };
 
   const renderContent = () => {

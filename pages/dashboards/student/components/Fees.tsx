@@ -1,8 +1,18 @@
-
 import React from 'react';
-import { STUDENT_PAYMENTS } from '../../../../constants';
+import { useData } from '../../../../contexts/DataContext';
 
 const Fees: React.FC = () => {
+    const { payments, updatePaymentStatus } = useData();
+
+    const handlePayNow = (paymentId: string) => {
+        updatePaymentStatus(paymentId, 'Paid');
+        alert('Payment successful! Your records have been updated.');
+    };
+
+    const handleViewReceipt = (paymentId: string) => {
+        alert(`Showing receipt for payment ID #${paymentId}.`);
+    };
+
     return (
         <div>
             <h2 className="text-2xl font-bold mb-6 text-atlas-orange">Fee & Payment History</h2>
@@ -18,7 +28,7 @@ const Fees: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {STUDENT_PAYMENTS.map((payment) => (
+                        {payments.map((payment) => (
                             <tr key={payment.id} className="border-b border-gray-800 hover:bg-gray-800/50">
                                 <td className="p-4">#{payment.id}</td>
                                 <td className="p-4">{payment.date}</td>
@@ -32,11 +42,11 @@ const Fees: React.FC = () => {
                                 </td>
                                 <td className="p-4">
                                     {payment.status === 'Due' ? (
-                                        <button className="bg-atlas-orange text-white font-bold py-1 px-3 rounded-md text-sm hover:bg-orange-600 transition">
+                                        <button onClick={() => handlePayNow(payment.id)} className="bg-atlas-orange text-white font-bold py-1 px-3 rounded-md text-sm hover:bg-orange-600 transition">
                                             Pay Now
                                         </button>
                                     ) : (
-                                        <button className="text-gray-400 text-sm hover:underline">View Receipt</button>
+                                        <button onClick={() => handleViewReceipt(payment.id)} className="text-gray-400 text-sm hover:underline">View Receipt</button>
                                     )}
                                 </td>
                             </tr>

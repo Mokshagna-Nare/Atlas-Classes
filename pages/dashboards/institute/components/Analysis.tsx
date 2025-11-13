@@ -1,8 +1,21 @@
-
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { ALL_RESULTS, INSTITUTE_STUDENTS, STUDENT_TESTS } from '../../../../constants';
 import { getPerformanceAnalysis } from '../../../../services/geminiService';
+import { UserGroupIcon, ClipboardDocumentListIcon, ChartPieIcon } from '../../../../components/icons';
+
+const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: string | number; }> = ({ icon, label, value }) => (
+    <div className="bg-atlas-black p-6 rounded-lg flex items-center space-x-4 border border-gray-800 hover:border-atlas-orange/50 transition-colors duration-300">
+        <div className="bg-atlas-gray p-3 rounded-md">
+            {icon}
+        </div>
+        <div>
+            <h3 className="text-gray-400 text-sm">{label}</h3>
+            <p className="text-2xl font-bold">{value}</p>
+        </div>
+    </div>
+);
+
 
 const Analysis: React.FC = () => {
     const [analysis, setAnalysis] = useState('');
@@ -35,37 +48,28 @@ const Analysis: React.FC = () => {
         <div>
             <h2 className="text-2xl font-bold mb-6 text-atlas-orange">Performance Analytics</h2>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                <div className="bg-atlas-black p-4 rounded-lg">
-                    <h3 className="text-gray-400">Total Students</h3>
-                    <p className="text-3xl font-bold">{INSTITUTE_STUDENTS.length}</p>
-                </div>
-                <div className="bg-atlas-black p-4 rounded-lg">
-                    <h3 className="text-gray-400">Tests Conducted</h3>
-                    <p className="text-3xl font-bold">{STUDENT_TESTS.filter(t => t.status === 'Completed').length}</p>
-                </div>
-                <div className="bg-atlas-black p-4 rounded-lg">
-                    <h3 className="text-gray-400">Overall Average</h3>
-                    <p className="text-3xl font-bold">{(ALL_RESULTS.reduce((acc, r) => acc + r.score, 0) / ALL_RESULTS.length).toFixed(2)}%</p>
-                </div>
+                <StatCard icon={<UserGroupIcon className="h-6 w-6 text-atlas-orange" />} label="Total Students" value={INSTITUTE_STUDENTS.length} />
+                <StatCard icon={<ClipboardDocumentListIcon className="h-6 w-6 text-atlas-orange" />} label="Tests Conducted" value={STUDENT_TESTS.filter(t => t.status === 'Completed').length} />
+                <StatCard icon={<ChartPieIcon className="h-6 w-6 text-atlas-orange" />} label="Overall Average" value={`${(ALL_RESULTS.reduce((acc, r) => acc + r.score, 0) / ALL_RESULTS.length).toFixed(2)}%`} />
             </div>
 
             <h3 className="text-xl font-bold mb-4">Test Performance Trends</h3>
-            <div className="h-80 bg-atlas-black p-4 rounded-lg mb-8">
+            <div className="h-80 bg-atlas-black p-4 rounded-lg border border-gray-800 mb-8">
                 <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartData}>
                         <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-                        <XAxis dataKey="name" stroke="#888" />
-                        <YAxis stroke="#888" />
+                        <XAxis dataKey="name" stroke="#888" fontSize={12} />
+                        <YAxis stroke="#888" fontSize={12} />
                         <Tooltip contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #444' }}/>
                         <Legend />
-                        <Bar dataKey="averageScore" fill="#FF6B00" />
-                        <Bar dataKey="topScore" fill="#FFA500" />
+                        <Bar dataKey="averageScore" fill="#FF6B00" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="topScore" fill="#FFA500" radius={[4, 4, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
             </div>
             
             <h3 className="text-xl font-bold mb-4">AI-Powered Insights</h3>
-            <div className="bg-atlas-black p-4 rounded-lg">
+            <div className="bg-atlas-black p-4 rounded-lg border border-gray-800">
                 <button 
                     onClick={handleAnalyze} 
                     disabled={isLoading}
@@ -75,7 +79,7 @@ const Analysis: React.FC = () => {
                 </button>
                 {isLoading && <p className="text-center text-gray-400">Generating insights...</p>}
                 {analysis && (
-                    <div className="prose prose-invert max-w-none text-gray-300 whitespace-pre-wrap">
+                    <div className="prose prose-invert max-w-none text-gray-300 whitespace-pre-wrap font-sans">
                         {analysis}
                     </div>
                 )}

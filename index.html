@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -22,12 +21,17 @@
             },
             animation: {
               'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+              'glow': 'glow 2.5s ease-in-out infinite alternate',
             },
             keyframes: {
               fadeInUp: {
                 '0%': { opacity: '0', transform: 'translateY(20px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
+              glow: {
+                'from': { 'box-shadow': '0 0 10px -5px rgba(255, 107, 0, 0.7)' },
+                'to': { 'box-shadow': '0 0 20px 5px rgba(255, 107, 0, 0.3)' }
+              }
             },
           }
         }

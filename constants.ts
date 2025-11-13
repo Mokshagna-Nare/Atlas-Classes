@@ -4,9 +4,9 @@ import { Course, FacultyMember, Testimonial, Student, Test, TestResult, Payment 
 export const NAV_LINKS = [
   { name: 'Home', href: 'home' },
   { name: 'Courses', href: 'courses' },
+  { name: 'Benefits', href: 'benefits' },
   { name: 'Mission', href: 'mission' },
   { name: 'Faculty', href: 'faculty' },
-  { name: 'Testimonials', href: 'testimonials' },
   { name: 'Careers', href: 'careers' },
   { name: 'Contact', href: 'contact' },
 ];
@@ -14,7 +14,7 @@ export const NAV_LINKS = [
 export const COURSES_DATA: Course[] = [
   {
     id: 1,
-    title: 'Foundation for IIT-JEE',
+    title: 'COMPASS – Foundation for IIT-JEE',
     description: 'Focused conceptual foundation for Grades 6–10 aspiring for IIT-JEE, building strong analytical and problem-solving skills from an early age.',
   },
   {

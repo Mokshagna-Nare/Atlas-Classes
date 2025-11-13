@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { EnvelopeIcon, PhoneIcon, GlobeAltIcon } from '../../../components/icons';
+import { EnvelopeIcon, PhoneIcon, GlobeAltIcon, MapPinIcon } from '../../../components/icons';
 
 const Contact: React.FC = () => {
   const [name, setName] = useState('');
@@ -49,13 +49,25 @@ const Contact: React.FC = () => {
                   </p>
                   <p className="flex items-center text-gray-300">
                     <GlobeAltIcon className="h-5 w-5 mr-3 text-atlas-orange" />
-                    <a href="#" className="hover:text-atlas-orange transition-colors">www.atlasclasses.com</a>
+                    <a href="https://www.atlasclasses.com" target="_blank" rel="noopener noreferrer" className="hover:text-atlas-orange transition-colors">www.atlasclasses.com</a>
+                  </p>
+                  <p className="flex items-start text-gray-300">
+                    <MapPinIcon className="h-5 w-5 mr-3 mt-1 text-atlas-orange flex-shrink-0" />
+                    <span>Bellari, Karnataka, India</span>
                   </p>
                 </div>
             </div>
-             <div className="bg-atlas-gray/50 border border-gray-800 rounded-xl h-64 flex items-center justify-center text-gray-500 overflow-hidden relative">
-                <img src="https://raw.githubusercontent.com/animated-mesh-gradients/animated-mesh-gradients/main/packages/images/dist/poster-3d-model-a.png" alt="Abstract map background" className="absolute inset-0 w-full h-full object-cover opacity-20" />
-                <p className="relative z-10 font-semibold">GLOBAL HEADQUARTERS</p>
+             <div className="bg-atlas-gray/50 border border-gray-800 rounded-xl h-64 overflow-hidden">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61525.9926415754!2d76.8824194519998!3d15.14815211915995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb714256865de11%3A0x46533a3ac1332a31!2sBallari%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1716386623696!5m2!1sen!2sin"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen={true}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title="Atlas Classes Location in Bellari, Karnataka"
+                ></iframe>
             </div>
           </div>
         </div>

@@ -47,7 +47,7 @@ const Analysis: React.FC = () => {
     return (
         <div>
             <h2 className="text-2xl font-bold mb-6 text-atlas-orange">Performance Analytics</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <StatCard icon={<UserGroupIcon className="h-6 w-6 text-atlas-orange" />} label="Total Students" value={INSTITUTE_STUDENTS.length} />
                 <StatCard icon={<ClipboardDocumentListIcon className="h-6 w-6 text-atlas-orange" />} label="Tests Conducted" value={STUDENT_TESTS.filter(t => t.status === 'Completed').length} />
                 <StatCard icon={<ChartPieIcon className="h-6 w-6 text-atlas-orange" />} label="Overall Average" value={`${(ALL_RESULTS.reduce((acc, r) => acc + r.score, 0) / ALL_RESULTS.length).toFixed(2)}%`} />

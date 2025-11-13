@@ -62,9 +62,9 @@ const AIPaperGenerator: React.FC = () => {
         <div>
             <h2 className="text-2xl font-bold mb-6 text-atlas-orange">AI Question Paper Generator</h2>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
                 {/* Form Section */}
-                <form onSubmit={handleSubmit} className="lg:col-span-4 space-y-4 bg-atlas-black p-6 rounded-lg">
+                <form onSubmit={handleSubmit} className="md:col-span-4 space-y-4 bg-atlas-black p-4 sm:p-6 rounded-lg">
                     <div>
                         <label className="text-sm font-bold text-gray-300 block mb-2">Topic</label>
                         <input type="text" value={topic} onChange={(e) => setTopic(e.target.value)} className="w-full p-2 bg-atlas-gray border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-atlas-orange" required/>
@@ -104,7 +104,7 @@ const AIPaperGenerator: React.FC = () => {
                 </form>
 
                 {/* Result Section */}
-                <div className="lg:col-span-8 bg-atlas-black p-6 rounded-lg">
+                <div className="md:col-span-8 bg-atlas-black p-4 sm:p-6 rounded-lg">
                     <h3 className="text-xl font-bold mb-4 text-white">Generated Paper</h3>
                     {isLoading && <p className="text-center text-gray-400">Generating with Gemini... Please wait.</p>}
                     
@@ -124,7 +124,7 @@ const AIPaperGenerator: React.FC = () => {
                                 <p className="text-xs text-gray-500 mt-1">To save, open the print dialog and select "Save as PDF".</p>
                             </div>
 
-                            <div id="printable-paper" className="bg-atlas-gray p-6 rounded-lg">
+                            <div id="printable-paper" className="bg-atlas-gray p-4 md:p-6 rounded-lg">
                                 <div className="hidden print:block text-center mb-8">
                                     <h2 className="text-2xl font-bold text-black">Question Paper: {topic}</h2>
                                     <p className="text-md text-gray-700">Difficulty: {difficulty} | Total Questions: {numQuestions}</p>

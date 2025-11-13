@@ -20,13 +20,13 @@ const TestCard: React.FC<{ test: Test }> = ({ test }) => {
     };
 
     return (
-        <div className="bg-atlas-gray p-4 rounded-lg flex justify-between items-center">
-            <div>
+        <div className="bg-atlas-gray p-4 rounded-lg flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+            <div className="w-full sm:w-auto text-center sm:text-left">
                 <p className="font-bold text-lg">{test.title}</p>
                 <p className="text-sm text-gray-400">Scheduled for: {test.date}</p>
             </div>
-            {test.status === 'Upcoming' && <button onClick={handleStartTest} className="bg-atlas-orange text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 transition">Start Test</button>}
-            {test.status === 'Completed' && <button onClick={handleViewResult} className="border border-atlas-orange text-atlas-orange font-bold py-2 px-4 rounded-md hover:bg-atlas-orange hover:text-white transition">View Result</button>}
+            {test.status === 'Upcoming' && <button onClick={handleStartTest} className="w-full sm:w-auto bg-atlas-orange text-white font-bold py-2 px-4 rounded-md hover:bg-orange-600 transition">Start Test</button>}
+            {test.status === 'Completed' && <button onClick={handleViewResult} className="w-full sm:w-auto border border-atlas-orange text-atlas-orange font-bold py-2 px-4 rounded-md hover:bg-atlas-orange hover:text-white transition">View Result</button>}
             {test.status === 'Assigned' && <p className="text-blue-400">Awaiting start date</p>}
         </div>
     );

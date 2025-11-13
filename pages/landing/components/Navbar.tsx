@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { NAV_LINKS } from '../../../constants';
@@ -8,10 +9,13 @@ interface NavbarProps {
     scrollToSection: (id: string) => void;
 }
 
-const Dropdown: React.FC<{
+interface DropdownProps {
     buttonText: string;
     children: React.ReactNode;
-}> = ({ buttonText, children }) => {
+    buttonClassName?: string;
+}
+
+const Dropdown: React.FC<DropdownProps> = ({ buttonText, children, buttonClassName }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -31,7 +35,7 @@ const Dropdown: React.FC<{
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center text-gray-300 hover:text-white font-semibold py-2 px-4 rounded-md transition-colors"
+                className={`flex items-center py-2 px-4 rounded-md transition-all duration-300 ease-in-out ${buttonClassName}`}
             >
                 {buttonText}
                 <ChevronDownIcon className={`h-4 w-4 ml-1 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
@@ -83,12 +87,18 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
                     ))}
                 </nav>
 
-                <div className="hidden md:flex items-center space-x-2">
-                    <Dropdown buttonText="Login">
+                <div className="hidden md:flex items-center space-x-4">
+                    <Dropdown
+                        buttonText="Login"
+                        buttonClassName="font-semibold text-gray-300 border border-gray-700 hover:text-white hover:border-atlas-orange hover:bg-atlas-orange/10"
+                    >
                        <Link to="/login/student" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Student Login</Link>
                        <Link to="/login/institute" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Institute Login</Link>
                     </Dropdown>
-                    <Dropdown buttonText="Sign Up">
+                    <Dropdown
+                        buttonText="Sign Up"
+                        buttonClassName="font-bold bg-atlas-orange text-white hover:bg-orange-600 transform hover:scale-105"
+                    >
                        <Link to="/signup/student" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Student Signup</Link>
                        <Link to="/signup/institute" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Institute Signup</Link>
                     </Dropdown>

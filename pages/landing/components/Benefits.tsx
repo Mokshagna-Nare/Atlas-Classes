@@ -31,8 +31,9 @@ const Benefits: React.FC = () => {
         <div className="w-24 h-1 bg-atlas-orange mx-auto mb-12"></div>
         <div className="grid md:grid-cols-2 gap-10 text-left">
             {/* School Benefits Card */}
-            <div className="group relative bg-atlas-gray p-8 rounded-xl shadow-lg border border-gray-800 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-atlas-orange/20 hover:-translate-y-1 hover:border-atlas-orange/30">
+            <div className="group relative bg-atlas-gray p-8 rounded-xl shadow-lg border border-gray-800 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-atlas-orange/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-atlas-gray via-atlas-black to-atlas-black opacity-50"></div>
+                <div className="absolute inset-0 bg-atlas-orange opacity-0 group-hover:opacity-10 transition-opacity duration-300 blur-2xl"></div>
                 <div className="relative">
                     <h3 className="text-3xl font-bold text-atlas-orange mb-6">Benefit to the School</h3>
                     <ul className="space-y-4">
@@ -46,8 +47,9 @@ const Benefits: React.FC = () => {
                 </div>
             </div>
             {/* Student & Parent Benefits Card */}
-            <div className="group relative bg-atlas-gray p-8 rounded-xl shadow-lg border border-gray-800 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-atlas-orange/20 hover:-translate-y-1 hover:border-atlas-orange/30">
+            <div className="group relative bg-atlas-gray p-8 rounded-xl shadow-lg border border-gray-800 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-atlas-orange/30">
                 <div className="absolute inset-0 bg-gradient-to-br from-atlas-gray via-atlas-black to-atlas-black opacity-50"></div>
+                <div className="absolute inset-0 bg-atlas-orange opacity-0 group-hover:opacity-10 transition-opacity duration-300 blur-2xl"></div>
                 <div className="relative">
                     <h3 className="text-3xl font-bold text-atlas-orange mb-6">Benefit to Students & Parents</h3>
                     <ul className="space-y-4">

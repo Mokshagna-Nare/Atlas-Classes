@@ -7,6 +7,7 @@ export const NAV_LINKS = [
   { name: 'Mission', href: 'mission' },
   { name: 'Faculty', href: 'faculty' },
   { name: 'Testimonials', href: 'testimonials' },
+  { name: 'Careers', href: 'careers' },
   { name: 'Contact', href: 'contact' },
 ];
 

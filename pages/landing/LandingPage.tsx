@@ -10,6 +10,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { ChevronUpIcon } from '../../components/icons';
 import { NAV_LINKS } from '../../constants';
+import Careers from './components/Careers';
 
 const LandingPage: React.FC = () => {
   const [activeSection, setActiveSection] = useState('home');
@@ -21,6 +22,7 @@ const LandingPage: React.FC = () => {
     mission: useRef<HTMLDivElement>(null),
     faculty: useRef<HTMLDivElement>(null),
     testimonials: useRef<HTMLDivElement>(null),
+    careers: useRef<HTMLDivElement>(null),
     contact: useRef<HTMLDivElement>(null),
   };
 
@@ -77,6 +79,7 @@ const LandingPage: React.FC = () => {
         <div ref={sectionRefs.mission} id="mission"><Mission /></div>
         <div ref={sectionRefs.faculty} id="faculty"><Faculty /></div>
         <div ref={sectionRefs.testimonials} id="testimonials"><Testimonials /></div>
+        <div ref={sectionRefs.careers} id="careers"><Careers /></div>
         <div ref={sectionRefs.contact} id="contact"><Contact /></div>
       </main>
       <Footer />

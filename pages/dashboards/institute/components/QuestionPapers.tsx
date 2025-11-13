@@ -14,6 +14,20 @@ const QuestionPapers: React.FC = () => {
     }
   };
 
+  const handleDownload = (fileName: string) => {
+    // Simulate file download
+    const mockContent = `This is a mock question paper for the test: ${fileName}.\n\nQ1. What is the capital of France?\n...`;
+    const blob = new Blob([mockContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName.replace('.pdf', '.txt'); // Downloading as txt as we can't generate a PDF on the fly here
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -33,7 +47,7 @@ const QuestionPapers: React.FC = () => {
                       </div>
                       <div className="flex items-center space-x-4">
                           <button onClick={() => alert(`Simulating view for ${paper.pdfFileName}`)} className="text-blue-400 hover:underline">View</button>
-                          <button onClick={() => alert(`Simulating download for ${paper.pdfFileName}`)} className="text-green-400 hover:underline">Download</button>
+                          <button onClick={() => handleDownload(paper.pdfFileName!)} className="text-green-400 hover:underline">Download</button>
                           <button onClick={() => handleDelete(paper.id)} className="text-red-500 hover:text-red-400">Delete</button>
                       </div>
                   </li>

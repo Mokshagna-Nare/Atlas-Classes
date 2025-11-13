@@ -12,6 +12,7 @@ import InstituteSignup from './pages/auth/InstituteSignup';
 import StudentSignup from './pages/auth/StudentSignup';
 import { User } from './types';
 import TakeTestPage from './pages/dashboards/student/TakeTestPage';
+import CareersPage from './pages/careers/CareersPage';
 
 // Wrapper to protect routes
 const ProtectedRoute: React.FC<{ role: 'institute' | 'student' }> = ({ role }) => {
@@ -46,6 +47,7 @@ const App: React.FC = () => {
         <Router>
           <Routes>
             <Route path="/" element={<LandingPage />} />
+            <Route path="/careers" element={<CareersPage />} />
             <Route path="/login/institute" element={<InstituteLogin />} />
             <Route path="/login/student" element={<StudentLogin />} />
             <Route path="/signup/institute" element={<InstituteSignup />} />

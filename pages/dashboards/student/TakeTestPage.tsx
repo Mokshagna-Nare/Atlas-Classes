@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useData } from '../../../contexts/DataContext';
@@ -38,6 +37,20 @@ const TakeTestPage: React.FC = () => {
         navigate('/dashboard/student');
     };
 
+    const handleDownload = (fileName: string) => {
+        // Simulate file download
+        const mockContent = `This is a mock question paper for the test: ${fileName}.\n\nQ1. What is the capital of France?\n...`;
+        const blob = new Blob([mockContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName.replace('.pdf', '.txt'); // Downloading as txt as we can't generate a PDF on the fly here
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
     if (!test) {
         return (
             <div className="min-h-screen bg-atlas-black flex items-center justify-center text-center p-8">
@@ -59,18 +72,17 @@ const TakeTestPage: React.FC = () => {
                 
                 <div className="bg-atlas-gray p-6 rounded-lg">
                     <h2 className="text-xl font-semibold mb-4">Instructions</h2>
-                    <p className="text-gray-300 mb-6">Please review the questions in the provided PDF. Once you are ready to submit, click the button below. This action is final and cannot be undone.</p>
+                    <p className="text-gray-300 mb-6">Please download and review the questions in the provided paper. Once you are ready to submit, click the button below. This action is final and cannot be undone.</p>
                     
                     <div className="border border-dashed border-gray-600 p-8 rounded-lg text-center bg-atlas-black">
                         <p className="text-lg font-medium">Question Paper:</p>
                         <p className="text-atlas-orange text-2xl font-mono my-4">{test.pdfFileName}</p>
-                        <a 
-                            href="#" 
-                            onClick={(e) => { e.preventDefault(); alert("In a real app, this would open the PDF in a new tab or an embedded viewer."); }} 
-                            className="text-blue-400 hover:underline"
+                        <button 
+                            onClick={() => handleDownload(test.pdfFileName!)} 
+                            className="bg-blue-600 text-white font-bold py-2 px-6 rounded-md hover:bg-blue-500 transition"
                         >
-                            View Questions
-                        </a>
+                            Download Paper
+                        </button>
                     </div>
 
                     <div className="mt-8 flex justify-between items-center">

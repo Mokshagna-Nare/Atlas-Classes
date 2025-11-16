@@ -1,5 +1,4 @@
-
-import { Course, FacultyMember, Testimonial, Student, Test, TestResult, Payment } from './types';
+import { Course, FacultyMember, Testimonial, Student, Test, TestResult, Payment, Institute, AdminQuestionPaper } from './types';
 
 export const NAV_LINKS = [
   { name: 'Home', href: 'home' },
@@ -60,6 +59,17 @@ export const TESTIMONIALS_DATA: Testimonial[] = [
     title: 'Partner Institute',
     rating: 4,
   },
+];
+
+export const INSTITUTES_DATA: Institute[] = [
+    { id: 'i1', name: 'ABC School', email: 'institute@atlas.com' },
+    { id: 'i2', name: 'Global Tech Academy', email: 'admin@gta.edu' },
+    { id: 'i3', name: 'Future Leaders Institute', email: 'contact@fli.org' },
+];
+
+export const ADMIN_QUESTION_PAPERS: AdminQuestionPaper[] = [
+    { id: 'aqp1', subject: 'Physics', fileName: 'admin_physics_mechanics_final.pdf', accessibleInstituteIds: ['i1'], fileContent: 'VGhpcyBpcyBhIG1vY2sgUGh5c2ljcyBQREYgZmlsZS4=', mimeType: 'text/plain' },
+    { id: 'aqp2', subject: 'Chemistry', fileName: 'admin_chem_organic_basics.pdf', accessibleInstituteIds: ['i1', 'i2'], fileContent: 'VGhpcyBpcyBhIG1vY2sgQ2hlbWlzdHJ5IFBERiBmaWxlLg==', mimeType: 'text/plain' },
 ];
 
 export const INSTITUTE_STUDENTS: Student[] = [

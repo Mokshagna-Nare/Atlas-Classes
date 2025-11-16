@@ -2,19 +2,15 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { LogoutIcon, SparklesIcon, ChartBarIcon, DocumentTextIcon, ClipboardCheckIcon, DocumentDuplicateIcon, MenuIcon, XIcon } from '../../../components/icons';
-import Tests from './components/Tests';
-import Results from './components/Results';
-import Analysis from './components/Analysis';
-import QuestionPapers from './components/QuestionPapers';
-import AIPaperGenerator from './components/AIPaperGenerator';
-import SharedPapers from './components/SharedPapers';
+import { LogoutIcon, MenuIcon, XIcon, UserGroupIcon, ClipboardDocumentListIcon } from '../../../components/icons';
+import ManageInstitutes from './components/ManageInstitutes';
+import UploadPaper from './components/UploadPaper';
 
-type DashboardView = 'tests' | 'papers' | 'results' | 'analysis' | 'ai-generator' | 'shared-papers';
+type DashboardView = 'institutes' | 'papers';
 
-const InstituteDashboard: React.FC = () => {
+const AdminDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeView, setActiveView] = useState<DashboardView>('ai-generator');
+  const [activeView, setActiveView] = useState<DashboardView>('papers');
   const { user, logout } = useAuth()!;
   const navigate = useNavigate();
 
@@ -25,13 +21,9 @@ const InstituteDashboard: React.FC = () => {
 
   const renderContent = () => {
     switch (activeView) {
-      case 'ai-generator': return <AIPaperGenerator />;
-      case 'analysis': return <Analysis />;
-      case 'results': return <Results />;
-      case 'tests': return <Tests />;
-      case 'papers': return <QuestionPapers />;
-      case 'shared-papers': return <SharedPapers />;
-      default: return <AIPaperGenerator />;
+      case 'institutes': return <ManageInstitutes />;
+      case 'papers': return <UploadPaper />;
+      default: return <UploadPaper />;
     }
   };
 
@@ -61,19 +53,15 @@ const InstituteDashboard: React.FC = () => {
       <aside className={`fixed inset-y-0 left-0 bg-black p-4 flex flex-col z-30 w-64 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex justify-between items-center mb-8">
             <div className="text-2xl font-bold text-atlas-orange px-2">
-                Atlas<span className="text-white">Portal</span>
+                Atlas<span className="text-white">Admin</span>
             </div>
             <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-gray-400 hover:text-white">
                 <XIcon className="h-6 w-6" />
             </button>
         </div>
         <nav className="flex-grow space-y-2">
-            <NavItem view="ai-generator" label="AI Paper Generator" icon={<SparklesIcon className="h-5 w-5" />} />
-            <NavItem view="analysis" label="Analysis" icon={<ChartBarIcon className="h-5 w-5" />} />
-            <NavItem view="results" label="Results" icon={<DocumentTextIcon className="h-5 w-5" />} />
-            <NavItem view="tests" label="Tests" icon={<ClipboardCheckIcon className="h-5 w-5" />} />
-            <NavItem view="papers" label="Question Papers" icon={<DocumentDuplicateIcon className="h-5 w-5" />} />
-            <NavItem view="shared-papers" label="Shared Papers" icon={<DocumentTextIcon className="h-5 w-5" />} />
+            <NavItem view="papers" label="Upload Papers" icon={<ClipboardDocumentListIcon className="h-5 w-5" />} />
+            <NavItem view="institutes" label="Manage Institutes" icon={<UserGroupIcon className="h-5 w-5" />} />
         </nav>
         <div className="mt-auto">
           <button onClick={handleLogout} className="w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-md bg-atlas-gray hover:bg-red-600/50 transition-colors">
@@ -90,8 +78,8 @@ const InstituteDashboard: React.FC = () => {
            <h1 className="text-xl font-bold truncate">Welcome, {user?.name}</h1>
         </header>
         <header className="hidden md:block mb-8">
-          <h1 className="text-3xl font-bold">Welcome, {user?.name}</h1>
-          <p className="text-gray-400">Here's your institute's performance overview.</p>
+          <h1 className="text-3xl font-bold">Admin Control Panel</h1>
+          <p className="text-gray-400">Manage institutes and educational materials.</p>
         </header>
         <div className="bg-atlas-gray p-4 sm:p-6 rounded-lg">
           {renderContent()}
@@ -101,4 +89,4 @@ const InstituteDashboard: React.FC = () => {
   );
 };
 
-export default InstituteDashboard;
+export default AdminDashboard;

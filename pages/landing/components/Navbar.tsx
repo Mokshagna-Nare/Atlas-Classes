@@ -94,6 +94,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
                     >
                        <Link to="/login/student" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Student Login</Link>
                        <Link to="/login/institute" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Institute Login</Link>
+                       <Link to="/login/admin" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Admin Login</Link>
                     </Dropdown>
                     <Dropdown
                         buttonText="Sign Up"
@@ -137,6 +138,9 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
                             </Link>
                              <Link to="/login/institute" onClick={() => setIsOpen(false)} className="block text-left py-2 px-2 text-gray-300 hover:text-atlas-orange rounded-md transition-colors">
                                 Institute Login
+                            </Link>
+                            <Link to="/login/admin" onClick={() => setIsOpen(false)} className="block text-left py-2 px-2 text-gray-300 hover:text-atlas-orange rounded-md transition-colors">
+                                Admin Login
                             </Link>
                              <Link to="/signup/student" onClick={() => setIsOpen(false)} className="block text-left py-2 px-2 text-gray-300 hover:text-atlas-orange rounded-md transition-colors">
                                 Student Signup

@@ -13,9 +13,11 @@ import StudentSignup from './pages/auth/StudentSignup';
 import { User } from './types';
 import TakeTestPage from './pages/dashboards/student/TakeTestPage';
 import CareersPage from './pages/careers/CareersPage';
+import AdminLogin from './pages/auth/AdminLogin';
+import AdminDashboard from './pages/dashboards/admin/AdminDashboard';
 
 // Wrapper to protect routes
-const ProtectedRoute: React.FC<{ role: 'institute' | 'student' }> = ({ role }) => {
+const ProtectedRoute: React.FC<{ role: 'institute' | 'student' | 'admin' }> = ({ role }) => {
   const auth = useAuth();
   const user = auth?.user as User | null;
 
@@ -31,6 +33,9 @@ const ProtectedRoute: React.FC<{ role: 'institute' | 'student' }> = ({ role }) =
     }
     if (user.role === 'student') {
         return <Navigate to="/dashboard/student" replace />;
+    }
+    if (user.role === 'admin') {
+      return <Navigate to="/dashboard/admin" replace />;
     }
     return <Navigate to="/" replace />;
   }
@@ -50,6 +55,7 @@ const App: React.FC = () => {
             <Route path="/careers" element={<CareersPage />} />
             <Route path="/login/institute" element={<InstituteLogin />} />
             <Route path="/login/student" element={<StudentLogin />} />
+            <Route path="/login/admin" element={<AdminLogin />} />
             <Route path="/signup/institute" element={<InstituteSignup />} />
             <Route path="/signup/student" element={<StudentSignup />} />
             
@@ -60,6 +66,10 @@ const App: React.FC = () => {
             <Route element={<ProtectedRoute role="student" />}>
               <Route path="/dashboard/student" element={<StudentDashboard />} />
               <Route path="/dashboard/student/test/:testId" element={<TakeTestPage />} />
+            </Route>
+
+            <Route element={<ProtectedRoute role="admin" />}>
+              <Route path="/dashboard/admin" element={<AdminDashboard />} />
             </Route>
             
             {/* Redirect any other path to home */}

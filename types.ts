@@ -1,9 +1,23 @@
-
 export interface User {
   id: string;
   name: string;
-  role: 'institute' | 'student';
+  role: 'institute' | 'student' | 'admin';
   instituteId?: string;
+}
+
+export interface Institute {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface AdminQuestionPaper {
+  id: string;
+  subject: 'Physics' | 'Chemistry' | 'Botany' | 'Zoology';
+  fileName: string;
+  accessibleInstituteIds: string[];
+  fileContent: string; // Base64 encoded file content
+  mimeType: string;
 }
 
 export interface FacultyMember {

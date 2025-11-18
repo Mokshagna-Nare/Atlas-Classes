@@ -29,7 +29,7 @@ const jobOpenings = [
     type: 'Full-time',
     location: 'Remote',
     details: ['₹35k - ₹45k per month'],
-    applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdIPG5Pe3H2sIZP04LRzIcg0m7RnIKISOaYAaJVOYIgHdCd0A/viewform?usp=header',
+    applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeDbsze_oPYva_-BlH-zggs3UJ71TXwCexJYGHIM8LQZT1_kw/viewform?usp=publish-editor',
     description: 'We are seeking a knowledgeable Physics Subject Matter Expert to enhance our curriculum. You will be responsible for creating high-quality educational content and training our educators to deliver it effectively.',
     responsibilities: [
       'Develop, review, and update academic materials for your subject.',
@@ -49,7 +49,7 @@ const jobOpenings = [
     type: 'Full-time',
     location: 'Remote',
     details: ['₹35k - ₹45k per month'],
-    applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdIPG5Pe3H2sIZP04LRzIcg0m7RnIKISOaYAaJVOYIgHdCd0A/viewform?usp=header',
+    applyLink: 'https://forms.gle/UEZGwEE3atpSeWco8',
     description: 'We are seeking a knowledgeable Chemistry Subject Matter Expert to enhance our curriculum. You will be responsible for creating high-quality educational content and training our educators to deliver it effectively.',
     responsibilities: [
       'Develop, review, and update academic materials for your subject.',
@@ -69,7 +69,7 @@ const jobOpenings = [
     type: 'Full-time',
     location: 'Remote',
     details: ['₹35k - ₹45k per month'],
-    applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdIPG5Pe3H2sIZP04LRzIcg0m7RnIKISOaYAaJVOYIgHdCd0A/viewform?usp=header',
+    applyLink: 'https://forms.gle/T4kLe6z8XH7hCkrP7',
     description: 'We are seeking a knowledgeable Maths Subject Matter Expert to enhance our curriculum. You will be responsible for creating high-quality educational content and training our educators to deliver it effectively.',
     responsibilities: [
       'Develop, review, and update academic materials for your subject.',
@@ -89,7 +89,7 @@ const jobOpenings = [
     type: 'Full-time',
     location: 'Remote',
     details: ['₹35k - ₹45k per month'],
-    applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdIPG5Pe3H2sIZP04LRzIcg0m7RnIKISOaYAaJVOYIgHdCd0A/viewform?usp=header',
+    applyLink: 'https://forms.gle/QeSouMTQWSqSCJnz7',
     description: 'We are seeking a knowledgeable Botany Subject Matter Expert to enhance our curriculum. You will be responsible for creating high-quality educational content and training our educators to deliver it effectively.',
     responsibilities: [
       'Develop, review, and update academic materials for your subject.',
@@ -109,7 +109,7 @@ const jobOpenings = [
     type: 'Full-time',
     location: 'Remote',
     details: ['₹35k - ₹45k per month'],
-    applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdIPG5Pe3H2sIZP04LRzIcg0m7RnIKISOaYAaJVOYIgHdCd0A/viewform?usp=header',
+    applyLink: 'https://forms.gle/6wGvR8iF4rjNNYyJ6',
     description: 'We are seeking a knowledgeable Zoology Subject Matter Expert to enhance our curriculum. You will be responsible for creating high-quality educational content and training our educators to deliver it effectively.',
     responsibilities: [
       'Develop, review, and update academic materials for your subject.',

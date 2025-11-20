@@ -213,8 +213,12 @@ const CareersPage: React.FC = () => {
         <div className="min-h-screen bg-atlas-black text-white font-sans">
             <header className="bg-atlas-gray shadow-md sticky top-0 z-20">
                 <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-                    <Link to="/" className="text-2xl font-bold text-atlas-orange">
-                        Atlas<span className="text-white">Classes</span>
+                    <Link to="/" className="flex items-center">
+                        <img 
+                            src="https://i.postimg.cc/xdCpx0Kj/Logo-new-(1).png" 
+                            alt="Atlas Classes" 
+                            className="h-14 w-auto object-contain" 
+                        />
                     </Link>
                     <Link to="/" className="flex items-center text-gray-300 hover:text-atlas-orange transition-colors">
                         <ArrowLeftIcon className="h-4 w-4 mr-2" />

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { NAV_LINKS } from '../../../constants';
@@ -13,9 +12,10 @@ interface DropdownProps {
     buttonText: string;
     children: React.ReactNode;
     buttonClassName?: string;
+    active?: boolean;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ buttonText, children, buttonClassName }) => {
+const Dropdown: React.FC<DropdownProps> = ({ buttonText, children, buttonClassName, active }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -32,16 +32,16 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, children, buttonClassNa
     }, []);
 
     return (
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative group" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`flex items-center py-2 px-4 rounded-md transition-all duration-300 ease-in-out ${buttonClassName}`}
+                className={`flex items-center py-2 px-5 rounded-full transition-all duration-300 ease-in-out ripple ${buttonClassName}`}
             >
                 {buttonText}
-                <ChevronDownIcon className={`h-4 w-4 ml-1 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDownIcon className={`h-4 w-4 ml-1 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
             {isOpen && (
-                <div className="absolute right-0 top-full mt-2 w-48 bg-atlas-gray rounded-md shadow-lg py-1 z-10 animate-fade-in-up" style={{ animationDuration: '0.2s' }}>
+                <div className="absolute right-0 top-full mt-2 w-56 bg-atlas-soft/95 backdrop-blur-xl rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] border border-gray-700/50 py-2 z-20 animate-scale-in origin-top-right overflow-hidden">
                     {children}
                 </div>
             )}
@@ -52,71 +52,93 @@ const Dropdown: React.FC<DropdownProps> = ({ buttonText, children, buttonClassNa
 
 const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
     const handleNavClick = (href: string) => {
         if (href === 'home') {
             window.location.hash = '';
-            window.location.reload();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             scrollToSection(href);
         }
     };
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 20) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
+            }
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     return (
-        <header className="fixed top-0 left-0 right-0 z-50 bg-atlas-black/80 backdrop-blur-sm shadow-md transition-all duration-300">
-            <div className="container mx-auto px-6 py-3 flex justify-between items-center">
-                <div className="text-2xl font-bold text-atlas-orange cursor-pointer" onClick={() => handleNavClick('home')}>
-                    Atlas<span className="text-white">Classes</span>
+        <header 
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${
+                isScrolled 
+                ? 'bg-atlas-dark/80 backdrop-blur-lg shadow-lg border-gray-800 py-2' 
+                : 'bg-transparent border-transparent py-4'
+            }`}
+        >
+            <div className="container mx-auto px-6 flex justify-between items-center">
+                <div className="cursor-pointer flex items-center transform transition-transform duration-300 hover:scale-105" onClick={() => handleNavClick('home')}>
+                    <img 
+                        src="https://i.postimg.cc/xdCpx0Kj/Logo-new-(1).png" 
+                        alt="Atlas Classes" 
+                        className="h-16 md:h-16 w-auto object-contain" 
+                    />
                 </div>
 
                 {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center space-x-6">
+                <nav className="hidden md:flex items-center space-x-1 bg-atlas-soft/30 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/5">
                     {NAV_LINKS.map((link) => (
                         <button
                             key={link.name}
                             onClick={() => handleNavClick(link.href)}
-                            className={`text-gray-300 hover:text-atlas-orange transition-colors relative font-medium ${
-                                activeSection === link.href ? 'text-atlas-orange' : ''
+                            className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                                activeSection === link.href 
+                                ? 'text-white bg-atlas-primary/10 shadow-[0_0_15px_rgba(16,185,129,0.3)]' 
+                                : 'text-gray-300 hover:text-white hover:bg-white/5'
                             }`}
                         >
                             {link.name}
-                            {activeSection === link.href && (
-                                <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-atlas-orange"></span>
-                            )}
                         </button>
                     ))}
                 </nav>
 
-                <div className="hidden md:flex items-center space-x-4">
+                <div className="hidden md:flex items-center space-x-3">
                     <Dropdown
                         buttonText="Login"
-                        buttonClassName="font-semibold text-gray-300 border border-gray-700 hover:text-white hover:border-atlas-orange hover:bg-atlas-orange/10"
+                        buttonClassName="font-medium text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-gray-600"
                     >
-                       <Link to="/login/student" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Student Login</Link>
-                       <Link to="/login/institute" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Institute Login</Link>
-                       <Link to="/login/admin" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Admin Login</Link>
+                       <Link to="/login/student" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors">Student Login</Link>
+                       <Link to="/login/institute" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors">Institute Login</Link>
+                       <Link to="/login/admin" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors">Admin Login</Link>
                     </Dropdown>
                     <Dropdown
                         buttonText="Sign Up"
-                        buttonClassName="font-bold bg-atlas-orange text-white hover:bg-orange-600 transform hover:scale-105"
+                        buttonClassName="font-bold bg-atlas-primary text-white hover:bg-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] border border-atlas-primary"
                     >
-                       <Link to="/signup/student" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Student Signup</Link>
-                       <Link to="/signup/institute" className="block w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-atlas-black hover:text-atlas-orange">Institute Signup</Link>
+                       <Link to="/signup/student" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors">Student Signup</Link>
+                       <Link to="/signup/institute" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors">Institute Signup</Link>
                     </Dropdown>
                 </div>
                 
                 {/* Mobile Nav Toggle */}
                 <div className="md:hidden">
-                    <button onClick={() => setIsOpen(!isOpen)} className="text-white focus:outline-none">
-                        {isOpen ? <XIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+                    <button onClick={() => setIsOpen(!isOpen)} className="text-gray-300 focus:outline-none hover:text-atlas-primary p-2 rounded-md hover:bg-white/5 transition-colors">
+                        {isOpen ? <XIcon className="h-8 w-8" /> : <MenuIcon className="h-8 w-8" />}
                     </button>
                 </div>
             </div>
 
             {/* Mobile Nav Menu */}
             {isOpen && (
-                <div className="md:hidden bg-atlas-black">
-                    <nav className="px-6 pt-2 pb-4 space-y-2 flex flex-col">
+                <div className="md:hidden bg-atlas-dark/95 backdrop-blur-xl border-t border-gray-800 absolute top-full left-0 right-0 h-screen overflow-y-auto">
+                    <nav className="px-6 py-8 space-y-2 flex flex-col">
                         {NAV_LINKS.map((link) => (
                             <button
                                 key={link.name}
@@ -124,30 +146,17 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
                                     handleNavClick(link.href)
                                     setIsOpen(false);
                                 }}
-                                className={`block text-left py-2 text-gray-300 hover:text-atlas-orange transition-colors ${
-                                    activeSection === link.href ? 'text-atlas-orange' : ''
+                                className={`block text-left py-4 text-xl font-medium border-b border-gray-800/50 transition-colors ${
+                                    activeSection === link.href ? 'text-atlas-primary' : 'text-gray-300 hover:text-white'
                                 }`}
                             >
                                 {link.name}
                             </button>
                         ))}
-                         <div className="border-t border-gray-700 pt-4 mt-2 space-y-2">
-                             <p className="px-2 text-sm font-semibold text-gray-500">PORTALS</p>
-                             <Link to="/login/student" onClick={() => setIsOpen(false)} className="block text-left py-2 px-2 text-gray-300 hover:text-atlas-orange rounded-md transition-colors">
-                                Student Login
-                            </Link>
-                             <Link to="/login/institute" onClick={() => setIsOpen(false)} className="block text-left py-2 px-2 text-gray-300 hover:text-atlas-orange rounded-md transition-colors">
-                                Institute Login
-                            </Link>
-                            <Link to="/login/admin" onClick={() => setIsOpen(false)} className="block text-left py-2 px-2 text-gray-300 hover:text-atlas-orange rounded-md transition-colors">
-                                Admin Login
-                            </Link>
-                             <Link to="/signup/student" onClick={() => setIsOpen(false)} className="block text-left py-2 px-2 text-gray-300 hover:text-atlas-orange rounded-md transition-colors">
-                                Student Signup
-                            </Link>
-                             <Link to="/signup/institute" onClick={() => setIsOpen(false)} className="block text-left py-2 px-2 text-gray-300 hover:text-atlas-orange rounded-md transition-colors">
-                                Institute Signup
-                            </Link>
+                         <div className="pt-8 space-y-4">
+                             <p className="text-xs font-bold text-gray-500 uppercase tracking-wider">Account Access</p>
+                             <Link to="/login/student" onClick={() => setIsOpen(false)} className="block w-full text-center py-4 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-700 transition-colors border border-gray-700">Student Login</Link>
+                             <Link to="/signup/student" onClick={() => setIsOpen(false)} className="block w-full text-center py-4 bg-atlas-primary text-white rounded-lg font-bold shadow-lg hover:bg-emerald-600 transition-colors ripple">Get Started</Link>
                          </div>
                     </nav>
                 </div>

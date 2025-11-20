@@ -1,3 +1,4 @@
+
 import { Course, FacultyMember, Testimonial, Student, Test, TestResult, Payment, Institute, AdminQuestionPaper } from './types';
 
 export const NAV_LINKS = [
@@ -80,26 +81,74 @@ export const INSTITUTE_STUDENTS: Student[] = [
 ];
 
 export const STUDENT_TESTS: Test[] = [
-    { id: 't1', title: 'Physics - Mechanics', date: '2024-09-15', status: 'Completed', instituteId: 'i1', subject: 'Physics', pdfFileName: 'mechanics-test.pdf' },
-    { id: 't2', title: 'Chemistry - Organic', date: '2024-09-22', status: 'Completed', instituteId: 'i1', subject: 'Chemistry', pdfFileName: 'organic-chem-test.pdf' },
-    { id: 't3', title: 'Mathematics - Algebra', date: '2024-10-01', status: 'Assigned', instituteId: 'i1', subject: 'Mathematics', pdfFileName: 'algebra-test.pdf' },
-    { id: 't4', title: 'Biology - Cell Structure', date: '2024-10-10', status: 'Upcoming', instituteId: 'i1', subject: 'Biology', pdfFileName: 'biology-cell-test.pdf' },
+    { id: 't1', title: 'Foundation Series Test A', date: '2024-09-15', status: 'Completed', instituteId: 'i1', subject: 'IIT-JEE Pattern', pdfFileName: 'series-a-test.pdf' },
+    { id: 't2', title: 'Foundation Series Test B', date: '2024-09-22', status: 'Completed', instituteId: 'i1', subject: 'IIT-JEE Pattern', pdfFileName: 'series-b-test.pdf' },
+    { id: 't3', title: 'Foundation Series Test C', date: '2024-10-01', status: 'Assigned', instituteId: 'i1', subject: 'IIT-JEE Pattern', pdfFileName: 'series-c-test.pdf' },
+    { id: 't4', title: 'Biology Unit Test 1', date: '2024-10-10', status: 'Upcoming', instituteId: 'i1', subject: 'NEET Pattern', pdfFileName: 'biology-test-1.pdf' },
 ];
 
 export const STUDENT_RESULTS: TestResult[] = [
-    { testId: 't1', studentId: 's1', score: 85, maxScore: 100, rank: 3, grade: 'A' },
-    { testId: 't2', studentId: 's1', score: 92, maxScore: 100, rank: 1, grade: 'A+' },
+    { 
+      testId: 't1', 
+      studentId: 's1', 
+      score: 255, 
+      maxScore: 300, 
+      rank: 3, 
+      grade: 'A',
+      subjectBreakdown: {
+        'Physics': { score: 90, maxScore: 100 },
+        'Chemistry': { score: 75, maxScore: 100 },
+        'Mathematics': { score: 90, maxScore: 100 }
+      }
+    },
+    { 
+      testId: 't2', 
+      studentId: 's1', 
+      score: 276, 
+      maxScore: 300, 
+      rank: 1, 
+      grade: 'A+',
+      subjectBreakdown: {
+        'Physics': { score: 95, maxScore: 100 },
+        'Chemistry': { score: 88, maxScore: 100 },
+        'Mathematics': { score: 93, maxScore: 100 }
+      }
+    },
 ];
 
 export let ALL_RESULTS: TestResult[] = [
-    { testId: 't1', studentId: 's1', score: 85, maxScore: 100, rank: 3, grade: 'A' },
-    { testId: 't1', studentId: 's2', score: 78, maxScore: 100, rank: 4, grade: 'B' },
-    { testId: 't1', studentId: 's3', score: 91, maxScore: 100, rank: 1, grade: 'A+' },
-    { testId: 't1', studentId: 's4', score: 88, maxScore: 100, rank: 2, grade: 'A' },
-    { testId: 't2', studentId: 's1', score: 92, maxScore: 100, rank: 1, grade: 'A+' },
-    { testId: 't2', studentId: 's2', score: 81, maxScore: 100, rank: 3, grade: 'A' },
-    { testId: 't2', studentId: 's3', score: 75, maxScore: 100, rank: 4, grade: 'B' },
-    { testId: 't2', studentId: 's4', score: 89, maxScore: 100, rank: 2, grade: 'A' },
+    { 
+      testId: 't1', 
+      studentId: 's1', 
+      score: 255, 
+      maxScore: 300, 
+      rank: 3, 
+      grade: 'A',
+      subjectBreakdown: {
+        'Physics': { score: 90, maxScore: 100 },
+        'Chemistry': { score: 75, maxScore: 100 },
+        'Mathematics': { score: 90, maxScore: 100 }
+      }
+    },
+    { testId: 't1', studentId: 's2', score: 234, maxScore: 300, rank: 4, grade: 'B' },
+    { testId: 't1', studentId: 's3', score: 273, maxScore: 300, rank: 1, grade: 'A+' },
+    { testId: 't1', studentId: 's4', score: 264, maxScore: 300, rank: 2, grade: 'A' },
+    { 
+      testId: 't2', 
+      studentId: 's1', 
+      score: 276, 
+      maxScore: 300, 
+      rank: 1, 
+      grade: 'A+',
+       subjectBreakdown: {
+        'Physics': { score: 95, maxScore: 100 },
+        'Chemistry': { score: 88, maxScore: 100 },
+        'Mathematics': { score: 93, maxScore: 100 }
+      }
+    },
+    { testId: 't2', studentId: 's2', score: 243, maxScore: 300, rank: 3, grade: 'A' },
+    { testId: 't2', studentId: 's3', score: 225, maxScore: 300, rank: 4, grade: 'B' },
+    { testId: 't2', studentId: 's4', score: 267, maxScore: 300, rank: 2, grade: 'A' },
 ];
 
 

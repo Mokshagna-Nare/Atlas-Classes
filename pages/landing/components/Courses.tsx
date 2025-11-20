@@ -4,21 +4,24 @@ import { Course } from '../../../types';
 import { CodeBracketIcon, HeartIcon, Squares2X2Icon } from '../../../components/icons';
 
 const courseIcons: { [key: string]: React.ReactNode } = {
-    'COMPASS – Foundation for IIT-JEE': <CodeBracketIcon className="h-10 w-10 text-atlas-orange mb-4" />,
-    'AXIS – Foundation for NEET': <HeartIcon className="h-10 w-10 text-atlas-orange mb-4" />,
-    'NEXUS – Comprehensive Foundation': <Squares2X2Icon className="h-10 w-10 text-atlas-orange mb-4" />
+    'COMPASS – Foundation for IIT-JEE': <CodeBracketIcon className="h-12 w-12 text-atlas-primary mb-6" />,
+    'AXIS – Foundation for NEET': <HeartIcon className="h-12 w-12 text-atlas-primary mb-6" />,
+    'NEXUS – Comprehensive Foundation': <Squares2X2Icon className="h-12 w-12 text-atlas-primary mb-6" />
 };
 
 const CourseCard: React.FC<{ course: Course }> = ({ course }) => (
-    <div className="group relative bg-atlas-gray p-8 rounded-xl shadow-lg border border-gray-800 transform hover:-translate-y-2 transition-all duration-300 flex flex-col overflow-hidden">
-        <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-br from-atlas-gray via-atlas-black to-atlas-black opacity-50 group-hover:opacity-80 transition-opacity duration-300"></div>
-        <div className="absolute top-0 left-0 h-full w-full bg-[radial-gradient(circle_at_top_left,_rgba(255,107,0,0.15),transparent_40%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        <div className="relative z-10 flex flex-col flex-grow">
-            {courseIcons[course.title]}
-            <h3 className="text-2xl font-bold text-white mb-4">{course.title}</h3>
-            <p className="text-gray-300 mb-6 flex-grow">{course.description}</p>
-            <button className="mt-auto bg-atlas-orange/10 border border-atlas-orange/50 text-atlas-orange font-semibold py-2 px-6 rounded-md hover:bg-atlas-orange hover:text-white transition duration-300">
-                Know More
+    <div className="group relative bg-atlas-soft p-10 rounded-2xl shadow-xl border border-gray-800 transform transition-all duration-500 hover:-translate-y-3 flex flex-col overflow-hidden hover:shadow-[0_10px_40px_-10px_rgba(16,185,129,0.2)] hover:border-atlas-primary/50">
+        {/* Hover Gradient Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-atlas-soft via-atlas-soft to-atlas-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        
+        <div className="relative z-10 flex flex-col flex-grow items-center text-center">
+            <div className="p-4 bg-atlas-dark rounded-full mb-6 border border-gray-700 group-hover:border-atlas-primary/30 transition-colors duration-300 shadow-inner">
+                {courseIcons[course.title]}
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-atlas-primary transition-colors duration-300">{course.title}</h3>
+            <p className="text-gray-400 mb-8 flex-grow leading-relaxed text-lg">{course.description}</p>
+            <button className="mt-auto w-full bg-transparent border border-gray-600 text-gray-300 font-bold py-3 px-6 rounded-lg hover:bg-atlas-primary hover:text-white hover:border-atlas-primary transition-all duration-300 uppercase tracking-wide text-sm ripple">
+                View Details
             </button>
         </div>
     </div>
@@ -26,11 +29,14 @@ const CourseCard: React.FC<{ course: Course }> = ({ course }) => (
 
 const Courses: React.FC = () => {
   return (
-    <section className="py-20 bg-atlas-black">
-      <div className="container mx-auto px-6 text-center">
-        <h2 className="text-4xl font-extrabold mb-4 tracking-tight">Our Core Programs</h2>
-        <div className="w-24 h-1 bg-atlas-orange mx-auto mb-12"></div>
-        <div className="grid md:grid-cols-3 gap-10">
+    <section className="py-24 bg-atlas-dark relative">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-16">
+             <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-white">Our Core Programs</h2>
+             <div className="w-24 h-1.5 bg-atlas-primary mx-auto rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
+             <p className="mt-6 text-gray-400 max-w-2xl mx-auto text-lg">Designed to build a robust academic foundation for future success.</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
           {COURSES_DATA.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}

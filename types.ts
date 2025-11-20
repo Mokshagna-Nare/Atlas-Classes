@@ -1,3 +1,4 @@
+
 export interface User {
   id: string;
   name: string;
@@ -68,6 +69,12 @@ export interface TestResult {
     maxScore: number;
     rank: number;
     grade: 'A+' | 'A' | 'B' | 'C' | 'D';
+    subjectBreakdown?: {
+      [subject: string]: {
+        score: number;
+        maxScore: number;
+      }
+    };
 }
 
 export interface Payment {

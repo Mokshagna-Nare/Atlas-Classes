@@ -1,3 +1,4 @@
+
 import React from 'react';
 
 export const MenuIcon: React.FC<{ className?: string }> = ({ className }) => (
@@ -131,4 +132,33 @@ export const MapPinIcon: React.FC<{ className?: string }> = ({ className }) => (
         <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
     </svg>
+);
+
+// --- Custom Brand Illustrations ---
+
+export const CompassIllustration: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+     <path d="M50 5 L65 35 L95 50 L65 65 L50 95 L35 65 L5 50 L35 35 Z" fill="currentColor" fillOpacity="0.2" />
+     <path d="M50 15 L58 42 L85 50 L58 58 L50 85 L42 58 L15 50 L42 42 Z" fill="currentColor" />
+     <circle cx="50" cy="50" r="5" fill="#0B0F19" />
+  </svg>
+);
+
+export const AxisIllustration: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="45" stroke="currentColor" strokeWidth="2" strokeOpacity="0.5" strokeDasharray="4 4"/>
+    <rect x="40" y="15" width="20" height="70" rx="4" fill="currentColor"/>
+    <rect x="15" y="40" width="70" height="20" rx="4" fill="currentColor"/>
+    <path d="M50 25V35 M50 65V75 M25 50H35 M65 50H75" stroke="#0B0F19" strokeWidth="2" strokeLinecap="round"/>
+  </svg>
+);
+
+export const NexusIllustration: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+     <path d="M20 20 C 50 50 50 50 80 80" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeOpacity="0.3"/>
+     <path d="M80 20 C 50 50 50 50 20 80" stroke="currentColor" strokeWidth="16" strokeLinecap="round" strokeOpacity="0.3"/>
+     <path d="M25 25 L75 75" stroke="currentColor" strokeWidth="8" strokeLinecap="round"/>
+     <path d="M75 25 L25 75" stroke="currentColor" strokeWidth="8" strokeLinecap="round"/>
+     <circle cx="50" cy="50" r="12" fill="currentColor" stroke="#0B0F19" strokeWidth="4"/>
+  </svg>
 );

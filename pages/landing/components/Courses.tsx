@@ -1,12 +1,13 @@
+
 import React from 'react';
 import { COURSES_DATA } from '../../../constants';
 import { Course } from '../../../types';
-import { CodeBracketIcon, HeartIcon, Squares2X2Icon } from '../../../components/icons';
+import { AxisIllustration, CompassIllustration, NexusIllustration } from '../../../components/icons';
 
 const courseIcons: { [key: string]: React.ReactNode } = {
-    'COMPASS – Foundation for IIT-JEE': <CodeBracketIcon className="h-12 w-12 text-atlas-primary mb-6" />,
-    'AXIS – Foundation for NEET': <HeartIcon className="h-12 w-12 text-atlas-primary mb-6" />,
-    'NEXUS – Comprehensive Foundation': <Squares2X2Icon className="h-12 w-12 text-atlas-primary mb-6" />
+    'COMPASS – Foundation for IIT-JEE': <CompassIllustration className="h-24 w-24 text-atlas-primary mb-6" />,
+    'AXIS – Foundation for NEET': <AxisIllustration className="h-24 w-24 text-atlas-primary mb-6" />,
+    'NEXUS – Comprehensive Foundation': <NexusIllustration className="h-24 w-24 text-atlas-primary mb-6" />
 };
 
 const CourseCard: React.FC<{ course: Course }> = ({ course }) => (
@@ -15,7 +16,7 @@ const CourseCard: React.FC<{ course: Course }> = ({ course }) => (
         <div className="absolute inset-0 bg-gradient-to-br from-atlas-soft via-atlas-soft to-atlas-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         
         <div className="relative z-10 flex flex-col flex-grow items-center text-center">
-            <div className="p-4 bg-atlas-dark rounded-full mb-6 border border-gray-700 group-hover:border-atlas-primary/30 transition-colors duration-300 shadow-inner">
+            <div className="p-6 bg-atlas-dark rounded-full mb-8 border border-gray-700 group-hover:border-atlas-primary/30 transition-colors duration-300 shadow-inner">
                 {courseIcons[course.title]}
             </div>
             <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-atlas-primary transition-colors duration-300">{course.title}</h3>

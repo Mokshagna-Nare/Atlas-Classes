@@ -6,7 +6,7 @@ export const NAV_LINKS = [
   { name: 'Courses', href: 'courses' },
   { name: 'Benefits', href: 'benefits' },
   { name: 'Mission', href: 'mission' },
-  { name: 'Faculty', href: 'faculty' },
+  { name: 'Team', href: 'faculty' },
   { name: 'Careers', href: 'careers' },
   { name: 'Contact', href: 'contact' },
 ];
@@ -30,12 +30,38 @@ export const COURSES_DATA: Course[] = [
 ];
 
 export const FACULTY_DATA: FacultyMember[] = [
-  { id: 1, name: 'Dr. Ananya Sharma', subject: 'Physics', subjects: ['Mechanics', 'Electromagnetism', 'Optics'], experience: '15+ Years', photoUrl: 'https://picsum.photos/id/1027/100/100', qualifications: 'Ph.D. in Astrophysics', bio: 'Dr. Sharma is a passionate physicist with over 15 years of experience in making complex concepts accessible. Her research in quantum mechanics has been published in several international journals. She believes in fostering a deep curiosity for the physical world in her students.' },
-  { id: 2, name: 'Prof. Rohan Verma', subject: 'Chemistry', subjects: ['Organic Chemistry', 'Inorganic Chemistry', 'Physical Chemistry'], experience: '12+ Years', photoUrl: 'https://picsum.photos/id/1005/100/100', qualifications: 'M.Sc. in Organic Chemistry', bio: 'Professor Verma specializes in organic chemistry and is known for his engaging teaching style and hands-on lab sessions. He has a knack for simplifying complex reaction mechanisms and has mentored numerous students for national science olympiads.' },
-  { id: 3, name: 'Ms. Priya Singh', subject: 'Mathematics', subjects: ['Algebra', 'Calculus', 'Trigonometry'], experience: '10+ Years', photoUrl: 'https://picsum.photos/id/1025/100/100', qualifications: 'M.A. in Mathematics', bio: 'Ms. Singh is a dedicated mathematics educator who focuses on building strong foundational skills. She uses real-world examples to make abstract mathematical concepts relatable and has a proven track record of helping students overcome their fear of math.' },
-  { id: 4, name: 'Mr. Vikram Kumar', subject: 'Biology', subjects: ['Botany', 'Zoology', 'Human Physiology'], experience: '14+ Years', photoUrl: 'https://picsum.photos/id/64/100/100', qualifications: 'M.Sc. in Biotechnology', bio: 'Mr. Kumar brings biology to life with his dynamic teaching methods and enthusiasm for the subject. He is an expert in preparing students for medical entrance exams, focusing on conceptual clarity and application-based learning.' },
-  { id: 5, name: 'Dr. Meera Desai', subject: 'Physics', subjects: ['Thermodynamics', 'Modern Physics', 'Wave Theory'], experience: '18+ Years', photoUrl: 'https://picsum.photos/id/237/100/100', qualifications: 'Ph.D. in Nuclear Physics', bio: 'With nearly two decades of teaching experience, Dr. Desai is a veteran in the field of physics education. She is adept at breaking down intricate topics and is committed to developing critical thinking skills in her students.' },
-  { id: 6, name: 'Prof. Arjun Mehta', subject: 'Chemistry', subjects: ['Biochemistry', 'Environmental Chemistry', 'Stoichiometry'], experience: '11+ Years', photoUrl: 'https://picsum.photos/id/433/100/100', qualifications: 'M.Phil. in Chemistry', bio: 'Professor Mehta is known for his innovative approach to teaching chemistry, often incorporating technology and interactive models. He focuses on building a strong understanding of fundamental principles to prepare students for advanced studies.' },
+  { 
+    id: 1, 
+    name: 'Gopala Krishna', 
+    subject: 'Academic Head', 
+    subjects: ['Curriculum Strategy', 'Faculty Development', 'Student Mentorship'], 
+    photoUrl: 'https://ui-avatars.com/api/?name=Gopala+Krishna&background=10B981&color=fff&size=200', 
+    bio: 'As an Academic Head, Gopala Krishna leads the strategic direction of our curriculum, ensuring it meets the highest standards of competitive exam preparation and holistic student development.' 
+  },
+  { 
+    id: 2, 
+    name: 'Shaiksha Vali', 
+    subject: 'Academic Head', 
+    subjects: ['Pedagogy Expert', 'Operational Excellence', 'Performance Analysis'], 
+    photoUrl: 'https://ui-avatars.com/api/?name=Shaiksha+Vali&background=10B981&color=fff&size=200', 
+    bio: 'Shaiksha Vali brings extensive experience in educational leadership, focusing on optimizing teaching methodologies and ensuring that our delivery mechanisms are effective and student-centric.' 
+  },
+  { 
+    id: 3, 
+    name: 'Rajesh', 
+    subject: 'Academic Head', 
+    subjects: ['Strategic Planning', 'Resource Management', 'Quality Control'], 
+    photoUrl: 'https://ui-avatars.com/api/?name=Rajesh&background=10B981&color=fff&size=200', 
+    bio: 'Rajesh oversees the academic integrity of our programs, implementing rigorous quality control measures and driving continuous improvement in our educational offerings.' 
+  },
+  { 
+    id: 4, 
+    name: 'Mokshagna', 
+    subject: 'Technical Head', 
+    subjects: ['Platform Development', 'Data Analytics', 'EdTech Innovation'], 
+    photoUrl: 'https://ui-avatars.com/api/?name=Mokshagna&background=10B981&color=fff&size=200', 
+    bio: 'Mokshagna leads our technology initiatives, building the robust digital infrastructure that powers Atlas Classes seamlessly. He ensures our LMS and assessment platforms are cutting-edge.' 
+  },
 ];
 
 export const TESTIMONIALS_DATA: Testimonial[] = [

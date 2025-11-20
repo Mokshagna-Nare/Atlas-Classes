@@ -35,13 +35,12 @@ const FacultyModal: React.FC<FacultyModalProps> = ({ member, onClose }) => {
                 />
                 <div>
                     <h2 className="text-3xl font-bold text-white">{member.name}</h2>
-                    <p className="text-atlas-orange font-semibold">{member.qualifications}</p>
-                    <p className="text-gray-400">{member.experience} Experience</p>
+                    <p className="text-atlas-primary font-semibold text-lg">{member.subject}</p>
                 </div>
             </div>
 
             <div className="mb-6">
-                <h3 className="font-bold text-lg text-atlas-orange mb-2">Subjects Taught</h3>
+                <h3 className="font-bold text-lg text-atlas-primary mb-2">Areas of Expertise</h3>
                 <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
                     {member.subjects.map((sub, index) => (
                         <span key={index} className="bg-atlas-black text-gray-300 px-3 py-1 text-sm rounded-full">{sub}</span>
@@ -50,7 +49,7 @@ const FacultyModal: React.FC<FacultyModalProps> = ({ member, onClose }) => {
             </div>
 
             <div>
-                <h3 className="font-bold text-lg text-atlas-orange mb-2">Biography</h3>
+                <h3 className="font-bold text-lg text-atlas-primary mb-2">Biography</h3>
                 <p className="text-gray-300 leading-relaxed text-left">{member.bio}</p>
             </div>
         </div>

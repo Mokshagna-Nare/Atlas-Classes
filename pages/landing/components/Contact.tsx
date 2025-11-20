@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { EnvelopeIcon, PhoneIcon, GlobeAltIcon, MapPinIcon } from '../../../components/icons';
+import { EnvelopeIcon, GlobeAltIcon, MapPinIcon } from '../../../components/icons';
 
 const Contact: React.FC = () => {
   const [name, setName] = useState('');
@@ -17,79 +18,101 @@ const Contact: React.FC = () => {
   };
 
   return (
-    <section className="py-24 bg-atlas-dark relative">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight text-white">Get in Touch</h2>
-          <div className="w-24 h-1.5 bg-atlas-primary mx-auto rounded-full"></div>
-        </div>
-        <div className="grid md:grid-cols-2 gap-12 items-start max-w-6xl mx-auto">
-          <div className="bg-atlas-soft/50 backdrop-blur-sm border border-gray-800 p-8 md:p-10 rounded-2xl shadow-2xl">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label className="block text-sm font-bold text-gray-400 mb-2">Name</label>
-                <input type="text" placeholder="Enter your name" value={name} onChange={e => setName(e.target.value)} required className="w-full p-4 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-atlas-primary focus:border-transparent transition-all text-white placeholder-gray-600 shadow-inner" />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-400 mb-2">Email</label>
-                <input type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full p-4 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-atlas-primary focus:border-transparent transition-all text-white placeholder-gray-600 shadow-inner" />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-400 mb-2">Phone</label>
-                <input type="tel" placeholder="Enter your phone number" value={phone} onChange={e => setPhone(e.target.value)} required className="w-full p-4 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-atlas-primary focus:border-transparent transition-all text-white placeholder-gray-600 shadow-inner" />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-400 mb-2">Message</label>
-                <textarea placeholder="How can we help you?" rows={5} value={message} onChange={e => setMessage(e.target.value)} required className="w-full p-4 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-atlas-primary focus:border-transparent transition-all text-white placeholder-gray-600 shadow-inner"></textarea>
-              </div>
-              <button type="submit" className="w-full bg-atlas-primary text-white font-bold py-4 px-8 rounded-xl hover:bg-emerald-600 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-[0_10px_20px_-10px_rgba(16,185,129,0.5)] ripple uppercase tracking-wider">
-                Send Message
-              </button>
-            </form>
-          </div>
-          <div className="space-y-8">
-            <div className="bg-atlas-soft border border-gray-800 p-8 rounded-2xl shadow-xl">
-                <h3 className="text-2xl font-bold mb-6 text-atlas-primary border-b border-gray-800 pb-4">Contact Details</h3>
-                <div className="space-y-6">
-                  <p className="flex items-center text-gray-300 group">
-                    <div className="bg-gray-800 p-3 rounded-full mr-4 group-hover:bg-atlas-primary/20 transition-colors">
-                        <EnvelopeIcon className="h-6 w-6 text-atlas-primary" />
+    <section className="py-24 bg-atlas-dark relative overflow-hidden" id="contact">
+      {/* Background Ambient Glow */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-atlas-primary/10 rounded-full blur-[100px]"></div>
+          <div className="absolute bottom-[-10%] left-[-5%] w-72 h-72 bg-emerald-600/10 rounded-full blur-[80px]"></div>
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+            
+            {/* Left Column: Contact Info & Intro */}
+            <div className="order-2 lg:order-1">
+                <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-white leading-tight">
+                    Get in <span className="text-atlas-primary">Touch</span>
+                </h2>
+                <p className="text-gray-400 text-lg mb-10 leading-relaxed">
+                    Have questions about our curriculum, faculty, or partnership model? We're here to answer all your queries and help you get started with Atlas Classes.
+                </p>
+
+                <div className="space-y-5">
+                    <a href="mailto:contact@atlasclasses.com" className="block group">
+                        <div className="flex items-center p-5 bg-atlas-soft border border-gray-800 rounded-2xl hover:border-atlas-primary/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all duration-300 transform hover:-translate-y-1">
+                            <div className="bg-gray-800 p-3.5 rounded-full mr-5 group-hover:bg-atlas-primary group-hover:text-white text-atlas-primary transition-colors duration-300 shadow-inner">
+                                <EnvelopeIcon className="h-6 w-6" />
+                            </div>
+                            <div>
+                                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Email Us</p>
+                                <p className="text-lg font-bold text-white group-hover:text-atlas-primary transition-colors">contact@atlasclasses.com</p>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="https://www.atlasclasses.com" target="_blank" rel="noopener noreferrer" className="block group">
+                         <div className="flex items-center p-5 bg-atlas-soft border border-gray-800 rounded-2xl hover:border-atlas-primary/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all duration-300 transform hover:-translate-y-1">
+                            <div className="bg-gray-800 p-3.5 rounded-full mr-5 group-hover:bg-atlas-primary group-hover:text-white text-atlas-primary transition-colors duration-300 shadow-inner">
+                                <GlobeAltIcon className="h-6 w-6" />
+                            </div>
+                            <div>
+                                <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Visit Website</p>
+                                <p className="text-lg font-bold text-white group-hover:text-atlas-primary transition-colors">www.atlasclasses.com</p>
+                            </div>
+                        </div>
+                    </a>
+
+                     <div className="flex items-center p-5 bg-atlas-soft border border-gray-800 rounded-2xl">
+                        <div className="bg-gray-800 p-3.5 rounded-full mr-5 text-atlas-primary shadow-inner">
+                            <MapPinIcon className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Headquarters</p>
+                            <p className="text-lg font-bold text-white">Bellari, Karnataka, India</p>
+                        </div>
                     </div>
-                    <a href="mailto:contact@atlasclasses.com" className="hover:text-atlas-primary transition-colors text-lg">contact@atlasclasses.com</a>
-                  </p>
-                  <p className="flex items-center text-gray-300 group">
-                    <div className="bg-gray-800 p-3 rounded-full mr-4 group-hover:bg-atlas-primary/20 transition-colors">
-                        <PhoneIcon className="h-6 w-6 text-atlas-primary" />
-                    </div>
-                    <a href="tel:+1234567890" className="hover:text-atlas-primary transition-colors text-lg">+123-456-7890</a>
-                  </p>
-                  <p className="flex items-center text-gray-300 group">
-                    <div className="bg-gray-800 p-3 rounded-full mr-4 group-hover:bg-atlas-primary/20 transition-colors">
-                        <GlobeAltIcon className="h-6 w-6 text-atlas-primary" />
-                    </div>
-                    <a href="https://www.atlasclasses.com" target="_blank" rel="noopener noreferrer" className="hover:text-atlas-primary transition-colors text-lg">www.atlasclasses.com</a>
-                  </p>
-                  <p className="flex items-start text-gray-300 group">
-                    <div className="bg-gray-800 p-3 rounded-full mr-4 mt-1 group-hover:bg-atlas-primary/20 transition-colors">
-                        <MapPinIcon className="h-6 w-6 text-atlas-primary" />
-                    </div>
-                    <span className="text-lg pt-1">Bellari, Karnataka, India</span>
-                  </p>
                 </div>
             </div>
-             <div className="bg-gray-800 border border-gray-700 rounded-2xl h-80 overflow-hidden shadow-xl grayscale hover:grayscale-0 transition-all duration-500">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61525.9926415754!2d76.8824194519998!3d15.14815211915995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb714256865de11%3A0x46533a3ac1332a31!2sBallari%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1716386623696!5m2!1sen!2sin"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg)' }}
-                    allowFullScreen={true}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Atlas Classes Location in Bellari, Karnataka"
-                ></iframe>
+
+            {/* Right Column: Contact Form */}
+            <div className="order-1 lg:order-2">
+                <div className="bg-atlas-soft p-8 md:p-10 rounded-3xl border border-gray-800 shadow-2xl relative overflow-hidden">
+                     {/* Glow effect behind form content */}
+                     <div className="absolute -inset-1 bg-gradient-to-br from-atlas-primary/20 to-transparent blur-2xl opacity-50 pointer-events-none"></div>
+                    
+                    <div className="relative z-10">
+                        <h3 className="text-2xl font-bold text-white mb-2">Send us a Message</h3>
+                        <p className="text-gray-400 mb-8 text-sm">Fill out the form below and we'll get back to you as soon as possible.</p>
+                        
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div className="grid md:grid-cols-2 gap-5">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-400 ml-1 uppercase">Name</label>
+                                    <input type="text" value={name} onChange={e => setName(e.target.value)} required className="w-full px-4 py-3.5 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-colors text-white placeholder-gray-600" placeholder="John Doe" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-400 ml-1 uppercase">Phone</label>
+                                    <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} required className="w-full px-4 py-3.5 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-colors text-white placeholder-gray-600" placeholder="+91 98765 43210" />
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-400 ml-1 uppercase">Email</label>
+                                <input type="email" value={email} onChange={e => setEmail(e.target.value)} required className="w-full px-4 py-3.5 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-colors text-white placeholder-gray-600" placeholder="john@example.com" />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-400 ml-1 uppercase">Message</label>
+                                <textarea rows={4} value={message} onChange={e => setMessage(e.target.value)} required className="w-full px-4 py-3.5 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-colors text-white placeholder-gray-600 resize-none" placeholder="How can we help you?" />
+                            </div>
+
+                            <button type="submit" className="w-full py-4 bg-atlas-primary hover:bg-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-900/20 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-emerald-900/40 uppercase tracking-wider text-sm">
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
       </div>
     </section>

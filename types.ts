@@ -26,9 +26,7 @@ export interface FacultyMember {
   name: string;
   subject: string;
   subjects: string[];
-  experience: string;
   photoUrl: string;
-  qualifications: string;
   bio: string;
 }
 

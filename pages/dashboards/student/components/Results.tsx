@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useData } from '../../../../contexts/DataContext';
 import { useAuth } from '../../../../contexts/AuthContext';
@@ -210,7 +211,7 @@ const Results: React.FC = () => {
                                                     <StarIcon className="h-5 w-5 text-emerald-400" />
                                                     <div>
                                                         <h4 className="text-emerald-400 font-bold text-sm">Excellent Performance!</h4>
-                                                        <p className="text-gray-400 text-sm">You are maintaining a strong hold (>80%) on all subjects. Keep it up!</p>
+                                                        <p className="text-gray-400 text-sm">You are maintaining a strong hold (&gt;80%) on all subjects. Keep it up!</p>
                                                     </div>
                                                  </div>
                                             )}

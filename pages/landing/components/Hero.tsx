@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ArrowRightIcon, SparklesIcon } from '../../../components/icons';
 
@@ -7,7 +8,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ scrollToSection }) => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-44">
       {/* Background with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         <img

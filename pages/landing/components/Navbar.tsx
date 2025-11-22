@@ -86,6 +86,17 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
         setIsOpen(false);
     };
 
+    // Close menu on resize to prevent layout issues
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 1024) {
+                setIsOpen(false);
+            }
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 20) {
@@ -100,13 +111,13 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
 
     return (
         <header 
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-                isScrolled 
-                ? 'bg-atlas-dark/85 backdrop-blur-xl shadow-lg shadow-black/50 border-b border-white/5 py-2' 
-                : 'bg-transparent border-b border-transparent py-4 lg:py-6'
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+                isScrolled || isOpen
+                ? 'bg-atlas-dark/95 backdrop-blur-xl shadow-lg shadow-black/50 border-b border-white/5 py-3 lg:py-4' 
+                : 'bg-transparent border-b border-transparent py-5 lg:py-6'
             }`}
         >
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16 lg:h-auto">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 
                 {/* Logo */}
                 <div className="cursor-pointer flex-shrink-0 flex items-center transform transition-transform duration-300 hover:scale-105 z-50" onClick={() => handleNavClick('home')}>
@@ -173,11 +184,12 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
 
             {/* Mobile/Tablet Nav Menu - Slide Down/Fade */}
             <div 
-                className={`lg:hidden fixed inset-x-0 top-[64px] bottom-0 bg-atlas-dark/95 backdrop-blur-xl border-t border-white/10 overflow-y-auto transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) ${
-                    isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-5 pointer-events-none'
+                className={`lg:hidden absolute top-full left-0 right-0 bg-atlas-dark/95 backdrop-blur-xl border-t border-white/10 overflow-y-auto transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) ${
+                    isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-5 pointer-events-none'
                 }`}
+                style={{ height: 'calc(100vh - 100%)' }}
             >
-                <nav className="px-6 py-8 space-y-2 flex flex-col max-w-md mx-auto">
+                <nav className="px-6 py-8 pb-24 space-y-2 flex flex-col max-w-md mx-auto">
                     {/* Navigation Links */}
                     {NAV_LINKS.map((link) => {
                         const isActive = activeSection === link.href;

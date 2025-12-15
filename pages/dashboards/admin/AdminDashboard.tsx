@@ -2,15 +2,16 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { LogoutIcon, MenuIcon, XIcon, UserGroupIcon, ClipboardDocumentListIcon } from '../../../components/icons';
+import { LogoutIcon, MenuIcon, XIcon, UserGroupIcon, ClipboardDocumentListIcon, SparklesIcon } from '../../../components/icons';
 import ManageInstitutes from './components/ManageInstitutes';
 import UploadPaper from './components/UploadPaper';
+import AIPaperGenerator from './components/AIPaperGenerator';
 
-type DashboardView = 'institutes' | 'papers';
+type DashboardView = 'institutes' | 'papers' | 'ai-generator';
 
 const AdminDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeView, setActiveView] = useState<DashboardView>('papers');
+  const [activeView, setActiveView] = useState<DashboardView>('ai-generator');
   const { user, logout } = useAuth()!;
   const navigate = useNavigate();
 
@@ -21,9 +22,10 @@ const AdminDashboard: React.FC = () => {
 
   const renderContent = () => {
     switch (activeView) {
+      case 'ai-generator': return <AIPaperGenerator />;
       case 'institutes': return <ManageInstitutes />;
       case 'papers': return <UploadPaper />;
-      default: return <UploadPaper />;
+      default: return <AIPaperGenerator />;
     }
   };
 
@@ -64,7 +66,8 @@ const AdminDashboard: React.FC = () => {
             </button>
         </div>
         <nav className="flex-grow space-y-2">
-            <NavItem view="papers" label="Upload Papers" icon={<ClipboardDocumentListIcon className="h-5 w-5" />} />
+            <NavItem view="ai-generator" label="Upload & Assign Test" icon={<SparklesIcon className="h-5 w-5" />} />
+            <NavItem view="papers" label="Share Papers (Docs)" icon={<ClipboardDocumentListIcon className="h-5 w-5" />} />
             <NavItem view="institutes" label="Manage Institutes" icon={<UserGroupIcon className="h-5 w-5" />} />
         </nav>
         <div className="mt-auto">
@@ -83,7 +86,7 @@ const AdminDashboard: React.FC = () => {
         </header>
         <header className="hidden md:block mb-8">
           <h1 className="text-3xl font-bold text-white">Admin Control Panel</h1>
-          <p className="text-gray-500">Manage institutes and educational materials.</p>
+          <p className="text-gray-500">Manage institutes, exams, and educational materials.</p>
         </header>
         <div className="bg-atlas-soft p-4 sm:p-6 rounded-lg shadow-sm border border-gray-800">
           {renderContent()}

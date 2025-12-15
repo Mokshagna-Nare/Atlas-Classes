@@ -10,13 +10,16 @@ const StudentLogin: React.FC = () => {
   const navigate = useNavigate();
   const auth = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === 'student@atlas.com' && password === 'password') {
-      auth?.login({ id: 's1', name: 'Riya Sharma', role: 'student', instituteId: 'i1' });
-      navigate('/dashboard/student');
-    } else {
-      setError('Invalid credentials. Please try again.');
+    setError('');
+    try {
+      if (auth) {
+          await auth.login({ email, password }, 'student');
+          navigate('/dashboard/student');
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
     }
   };
 
@@ -55,8 +58,8 @@ const StudentLogin: React.FC = () => {
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button type="submit" className="w-full bg-atlas-green text-white font-bold py-3 px-6 rounded-md hover:bg-green-600 transition duration-300 shadow-md shadow-green-900/20">
-            Login
+          <button type="submit" disabled={auth?.isLoading} className="w-full bg-atlas-green text-white font-bold py-3 px-6 rounded-md hover:bg-green-600 transition duration-300 shadow-md shadow-green-900/20 disabled:opacity-50">
+            {auth?.isLoading ? 'Logging in...' : 'Login'}
           </button>
         </form>
          <p className="text-center text-gray-500 mt-4 text-sm">

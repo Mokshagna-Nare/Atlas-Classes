@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { convertHtmlToTest } from '../../../../services/geminiService';
 import { Question, Test } from '../../../../types';
-import { SparklesIcon, DocumentTextIcon, ArrowRightIcon, CodeBracketIcon } from '../../../../components/icons';
+import { SparklesIcon, DocumentTextIcon, ArrowRightIcon, UserGroupIcon, CodeBracketIcon } from '../../../../components/icons';
 import { useData } from '../../../../contexts/DataContext';
 import { useAuth } from '../../../../contexts/AuthContext';
 
@@ -17,18 +17,20 @@ const AIPaperGenerator: React.FC = () => {
     const [generatedTitle, setGeneratedTitle] = useState('');
     const [generatedSubject, setGeneratedSubject] = useState('');
     const [error, setError] = useState<string | null>(null);
-
-    const { addTest } = useData();
-    const { user } = useAuth()!;
+    
+    // Admin Specific State
+    const { addTest, institutes } = useData();
+    const [targetInstituteId, setTargetInstituteId] = useState<string>(institutes.length > 0 ? institutes[0].id : '');
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
+            // Check for HTML extension or MIME type
             if (file.type === 'text/html' || file.name.endsWith('.html') || file.name.endsWith('.htm')) {
                 setHtmlFile(file);
                 setFilePreviewName(file.name);
                 setError('');
-                // Reset previous generations
+                // Reset previous generations when new file selected
                 setGeneratedQuestions(null);
             } else {
                 setError('Please upload a valid HTML file (.html, .htm).');
@@ -65,7 +67,7 @@ const AIPaperGenerator: React.FC = () => {
             const result = await convertHtmlToTest(htmlContent);
             
             if (!result.questions || result.questions.length === 0) {
-                throw new Error("No questions detected. Please ensure the HTML contains text content.");
+                throw new Error("No questions detected. Please check if the HTML file contains text.");
             }
 
             setGeneratedQuestions(result.questions);
@@ -73,7 +75,7 @@ const AIPaperGenerator: React.FC = () => {
             setGeneratedSubject(result.subject || 'Mixed');
         } catch (err: any) {
             console.error(err);
-            const errorMessage = err.message || 'Failed to process HTML.';
+            const errorMessage = err.message || 'Failed to process request.';
             setError(`Error: ${errorMessage}`);
         }
         setIsLoading(false);
@@ -81,6 +83,12 @@ const AIPaperGenerator: React.FC = () => {
 
     const handleSaveAsTest = () => {
         if (!generatedQuestions) return;
+        if (!targetInstituteId) {
+            alert('Please select an institute to assign this test to.');
+            return;
+        }
+
+        const selectedInstituteName = institutes.find(i => i.id === targetInstituteId)?.name || 'Institute';
 
         const newTest: Test = {
             id: `t${Date.now()}`,
@@ -88,13 +96,14 @@ const AIPaperGenerator: React.FC = () => {
             subject: generatedSubject,
             date: new Date().toISOString().split('T')[0],
             status: 'Upcoming',
-            instituteId: user!.id,
-            pdfFileName: filePreviewName, // Keeping for record
+            instituteId: targetInstituteId,
+            pdfFileName: filePreviewName, // Keeping key name for compatibility, storing HTML filename
             questions: generatedQuestions
         };
 
         addTest(newTest);
-        alert('Test successfully created and assigned to dashboard!');
+        alert(`Test successfully created and assigned to ${selectedInstituteName}!`);
+        
         // Reset
         setGeneratedQuestions(null);
         setHtmlFile(null);
@@ -106,7 +115,7 @@ const AIPaperGenerator: React.FC = () => {
             <div className="flex justify-between items-center mb-6">
                  <div>
                     <h2 className="text-2xl font-bold text-atlas-primary">HTML Exam Converter</h2>
-                    <p className="text-gray-400 text-sm mt-1">Convert HTML document code into interactive tests.</p>
+                    <p className="text-gray-400 text-sm mt-1">Convert HTML document code into interactive tests with AI.</p>
                  </div>
             </div>
 
@@ -114,21 +123,40 @@ const AIPaperGenerator: React.FC = () => {
                 {/* Input Panel */}
                 <form onSubmit={handleGenerate} className="md:col-span-4 space-y-6 bg-atlas-black p-6 rounded-2xl border border-gray-800 shadow-xl h-fit">
                     
-                    <div className="text-center py-8 border-2 border-dashed border-gray-700 rounded-xl bg-atlas-gray/20 hover:bg-atlas-gray/40 transition-colors">
-                         <DocumentTextIcon className="h-12 w-12 text-atlas-primary mx-auto mb-4" />
-                         <p className="text-gray-300 font-bold mb-2">Upload HTML Paper</p>
-                         <p className="text-gray-500 text-sm mb-6 px-4">Supports .html files. The AI will extract questions, options, and diagrams.</p>
-                         <label className="inline-block">
-                            <span className="bg-atlas-gray border border-gray-600 text-white font-bold py-2 px-6 rounded-lg cursor-pointer hover:bg-gray-700 hover:border-white transition-all">
-                                Browse Files
-                            </span>
-                            <input type="file" accept=".html,.htm" onChange={handleFileChange} className="hidden"/>
-                         </label>
-                         {filePreviewName && (
-                             <div className="mt-4 flex items-center justify-center text-sm text-emerald-400 bg-emerald-900/20 py-2 mx-4 rounded">
-                                 <span className="truncate max-w-[200px]">{filePreviewName}</span>
-                             </div>
-                         )}
+                    {/* Admin: Select Institute */}
+                    <div>
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2 flex items-center gap-2">
+                            <UserGroupIcon className="h-4 w-4" />
+                            Assign to Institute
+                        </label>
+                        <select 
+                            value={targetInstituteId} 
+                            onChange={(e) => setTargetInstituteId(e.target.value)} 
+                            className="w-full p-3 bg-atlas-gray border border-gray-600 rounded-xl focus:outline-none focus:border-atlas-primary text-white"
+                        >
+                            {institutes.map(inst => (
+                                <option key={inst.id} value={inst.id}>{inst.name} ({inst.id})</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="border-t border-gray-800 pt-6">
+                        <div className="text-center py-8 border-2 border-dashed border-gray-700 rounded-xl bg-atlas-gray/20 hover:bg-atlas-gray/40 transition-colors">
+                             <DocumentTextIcon className="h-12 w-12 text-atlas-primary mx-auto mb-4" />
+                             <p className="text-gray-300 font-bold mb-2">Upload HTML Paper</p>
+                             <p className="text-gray-500 text-sm mb-6 px-4">Upload the .html file containing the questions.</p>
+                             <label className="inline-block">
+                                <span className="bg-atlas-gray border border-gray-600 text-white font-bold py-2 px-6 rounded-lg cursor-pointer hover:bg-gray-700 hover:border-white transition-all">
+                                    Browse Files
+                                </span>
+                                <input type="file" accept=".html,.htm" onChange={handleFileChange} className="hidden"/>
+                             </label>
+                             {filePreviewName && (
+                                 <div className="mt-4 flex items-center justify-center text-sm text-emerald-400 bg-emerald-900/20 py-2 mx-4 rounded">
+                                     <span className="truncate max-w-[200px]">{filePreviewName}</span>
+                                 </div>
+                             )}
+                        </div>
                     </div>
 
                     <button type="submit" disabled={isLoading} className="w-full flex justify-center items-center space-x-2 bg-gradient-to-r from-atlas-primary to-emerald-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-emerald-900/50 hover:shadow-emerald-900/70 hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -137,7 +165,7 @@ const AIPaperGenerator: React.FC = () => {
                         ) : (
                             <>
                                 <SparklesIcon className="h-5 w-5" />
-                                <span>Convert & Extract</span>
+                                <span>Extract & Create Test</span>
                             </>
                         )}
                     </button>
@@ -147,13 +175,13 @@ const AIPaperGenerator: React.FC = () => {
                 {/* Preview Panel */}
                 <div className="md:col-span-8 bg-atlas-black p-6 rounded-2xl border border-gray-800 shadow-xl min-h-[600px] flex flex-col">
                     <div className="flex justify-between items-center mb-6 pb-6 border-b border-gray-800">
-                        <h3 className="text-xl font-bold text-white">Preview & Edit</h3>
+                        <h3 className="text-xl font-bold text-white">Test Preview</h3>
                         {generatedQuestions && (
                             <button 
                                 onClick={handleSaveAsTest}
-                                className="flex items-center space-x-2 bg-white text-black font-bold py-2 px-5 rounded-lg hover:bg-gray-200 transition-colors shadow-glow"
+                                className="flex items-center space-x-2 bg-white text-black font-bold py-2 px-5 rounded-lg hover:bg-gray-200 transition-colors shadow-glow animate-pulse-slow"
                             >
-                                <span>Save to Tests</span>
+                                <span>Confirm & Assign</span>
                                 <ArrowRightIcon className="h-4 w-4" />
                             </button>
                         )}
@@ -163,7 +191,7 @@ const AIPaperGenerator: React.FC = () => {
                         {isLoading ? (
                             <div className="h-full flex flex-col items-center justify-center text-gray-500 space-y-4">
                                 <div className="w-16 h-16 border-4 border-atlas-primary border-t-transparent rounded-full animate-spin"></div>
-                                <p className="animate-pulse">Parsing HTML & Generating Diagrams...</p>
+                                <p className="animate-pulse text-lg">Parsing HTML & Generating Diagrams...</p>
                             </div>
                         ) : !generatedQuestions ? (
                             <div className="h-full flex flex-col items-center justify-center text-gray-600 opacity-50">
@@ -174,7 +202,10 @@ const AIPaperGenerator: React.FC = () => {
                             <div className="space-y-6 animate-fade-in-up">
                                 <div className="text-center mb-8">
                                     <h2 className="text-3xl font-bold text-white mb-2">{generatedTitle}</h2>
-                                    <span className="inline-block bg-atlas-gray px-3 py-1 rounded-full text-xs text-gray-400 uppercase tracking-widest">{generatedSubject}</span>
+                                    <div className="flex justify-center gap-2">
+                                        <span className="inline-block bg-atlas-gray px-3 py-1 rounded-full text-xs text-gray-400 uppercase tracking-widest">{generatedSubject}</span>
+                                        <span className="inline-block bg-atlas-primary/20 px-3 py-1 rounded-full text-xs text-atlas-primary uppercase tracking-widest">{generatedQuestions.length} Questions</span>
+                                    </div>
                                 </div>
                                 {generatedQuestions.map((q, index) => (
                                     <div key={index} className="bg-atlas-gray/40 p-6 rounded-xl border border-gray-700/50 hover:border-atlas-primary/30 transition-colors">
@@ -234,7 +265,7 @@ const AIPaperGenerator: React.FC = () => {
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
                     background: rgba(16, 185, 129, 0.5);
                 }
-                 svg {
+                svg {
                     max-width: 100%;
                     height: auto;
                 }

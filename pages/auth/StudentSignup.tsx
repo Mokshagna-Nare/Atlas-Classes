@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -11,16 +12,23 @@ const StudentSignup: React.FC = () => {
   const navigate = useNavigate();
   const auth = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
       return;
     }
-    // Mock signup logic
-    console.log('Signing up student:', { name, email, password });
-    auth?.login({ id: 's_new', name, role: 'student', instituteId: 'i1' });
-    navigate('/dashboard/student');
+    setError('');
+    
+    try {
+        if (auth) {
+            await auth.signup({ name, email, password, role: 'student' });
+            await auth.login({ email, password }, 'student');
+            navigate('/dashboard/student');
+        }
+    } catch (err: any) {
+        setError(err.response?.data?.message || 'Signup failed. Please try again.');
+    }
   };
 
   return (
@@ -73,8 +81,8 @@ const StudentSignup: React.FC = () => {
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button type="submit" className="w-full bg-atlas-orange text-white font-bold py-3 px-6 rounded-md hover:bg-orange-600 transition duration-300">
-            Create Account
+          <button type="submit" disabled={auth?.isLoading} className="w-full bg-atlas-orange text-white font-bold py-3 px-6 rounded-md hover:bg-orange-600 transition duration-300 disabled:opacity-50">
+            {auth?.isLoading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
         <p className="text-center text-gray-400 mt-4 text-sm">

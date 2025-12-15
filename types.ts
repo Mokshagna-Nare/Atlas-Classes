@@ -50,6 +50,17 @@ export interface Student {
   instituteId: string;
 }
 
+export interface Question {
+  id?: string;
+  question: string;
+  type: 'Multiple Choice' | 'Short Answer' | 'True/False';
+  options?: string[];
+  answer: string;
+  explanation?: string;
+  diagramDescription?: string; // Text description of image if extracted
+  diagramSvg?: string; // AI generated SVG code for the diagram
+}
+
 export interface Test {
     id: string;
     title: string;
@@ -58,6 +69,7 @@ export interface Test {
     instituteId: string;
     subject: string;
     pdfFileName?: string;
+    questions?: Question[]; // Added to store parsed questions from PDF
 }
 
 export interface TestResult {
@@ -73,6 +85,7 @@ export interface TestResult {
         maxScore: number;
       }
     };
+    studentAnswers?: Record<string, string>; // Maps question index (as string) to selected option
 }
 
 export interface Payment {
@@ -80,11 +93,4 @@ export interface Payment {
     date: string;
     amount: number;
     status: 'Paid' | 'Due';
-}
-
-export interface Question {
-  question: string;
-  type: 'Multiple Choice' | 'Short Answer' | 'True/False';
-  options?: string[];
-  answer: string;
 }

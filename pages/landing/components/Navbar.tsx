@@ -71,7 +71,6 @@ const MobileAccordion: React.FC<{ title: string; children: React.ReactNode }> = 
     );
 }
 
-
 const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -86,10 +85,10 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
         setIsOpen(false);
     };
 
-    // Close menu on resize to prevent layout issues
+    // Close menu on resize to prevent layout issues on large screens
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth >= 1024) {
+            if (window.innerWidth >= 1024) { // Close on lg breakpoint
                 setIsOpen(false);
             }
         };
@@ -97,6 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Detect scroll for sticky header styling
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 20) {
@@ -117,7 +117,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
                 : 'bg-transparent border-b border-transparent py-5 lg:py-6'
             }`}
         >
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center relative">
                 
                 {/* Logo */}
                 <div className="cursor-pointer flex-shrink-0 flex items-center transform transition-transform duration-300 hover:scale-105 z-50" onClick={() => handleNavClick('home')}>
@@ -129,14 +129,15 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
                 </div>
 
                 {/* Desktop Nav - Visible on Large Screens (1024px+) */}
-                <nav className="hidden lg:flex items-center space-x-1 bg-atlas-soft/40 backdrop-blur-2xl px-2 py-1.5 rounded-full border border-white/10 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.3)] mx-4 flex-shrink max-w-3xl justify-center">
+                {/* Uses lg:flex to ensure it shows on small laptops/landscape tablets */}
+                <nav className="hidden lg:flex items-center space-x-1 bg-atlas-soft/40 backdrop-blur-2xl px-3 py-2 rounded-full border border-white/10 shadow-[0_4px_20px_-5px_rgba(0,0,0,0.3)] mx-4 flex-shrink max-w-4xl justify-center">
                     {NAV_LINKS.map((link) => {
                          const isActive = activeSection === link.href;
                          return (
                             <button
                                 key={link.name}
                                 onClick={() => handleNavClick(link.href)}
-                                className={`relative px-3 xl:px-5 py-2 rounded-full text-xs xl:text-sm transition-all duration-300 font-medium overflow-hidden group whitespace-nowrap ${
+                                className={`relative px-4 xl:px-6 py-2.5 rounded-full text-xs xl:text-sm transition-all duration-300 font-medium overflow-hidden group whitespace-nowrap ${
                                     isActive 
                                     ? 'text-white bg-atlas-primary/15 border border-atlas-primary/40 shadow-[0_0_15px_-3px_rgba(16,185,129,0.5)]' 
                                     : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'
@@ -155,18 +156,18 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
                 <div className="hidden lg:flex items-center space-x-2 xl:space-x-4 flex-shrink-0">
                     <Dropdown
                         buttonText="Login"
-                        buttonClassName="text-sm font-semibold text-gray-400 hover:text-white transition-colors px-3 py-2 hover:bg-white/5 rounded-lg"
+                        buttonClassName="text-xs xl:text-sm font-semibold text-gray-400 hover:text-white transition-colors px-3 py-2 hover:bg-white/5 rounded-lg"
                     >
-                       <Link to="/login/student" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Student Login</Link>
-                       <Link to="/login/institute" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Institute Login</Link>
-                       <Link to="/login/admin" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Admin Login</Link>
+                       <Link to="/login/student" className="block w-full text-left px-5 py-3 text-xs text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Student Login</Link>
+                       <Link to="/login/institute" className="block w-full text-left px-5 py-3 text-xs text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Institute Login</Link>
+                       <Link to="/login/admin" className="block w-full text-left px-5 py-3 text-xs text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Admin Login</Link>
                     </Dropdown>
                     <Dropdown
                         buttonText="Sign Up"
-                        buttonClassName="text-xs xl:text-sm font-bold bg-atlas-primary text-white px-5 py-2.5 rounded-full shadow-[0_0_20px_-5px_rgba(16,185,129,0.6)] hover:shadow-[0_0_30px_-5px_rgba(16,185,129,0.8)] hover:bg-emerald-500 transition-all duration-300 border border-emerald-400/30 hover:-translate-y-0.5 whitespace-nowrap"
+                        buttonClassName="text-xs xl:text-sm font-bold bg-atlas-primary text-white px-6 py-3 rounded-full shadow-[0_0_20px_-5px_rgba(16,185,129,0.6)] hover:shadow-[0_0_30px_-5px_rgba(16,185,129,0.8)] hover:bg-emerald-500 transition-all duration-300 border border-emerald-400/30 hover:-translate-y-0.5 whitespace-nowrap"
                     >
-                       <Link to="/signup/student" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Student Signup</Link>
-                       <Link to="/signup/institute" className="block w-full text-left px-5 py-3 text-sm text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Institute Signup</Link>
+                       <Link to="/signup/student" className="block w-full text-left px-5 py-3 text-xs text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Student Signup</Link>
+                       <Link to="/signup/institute" className="block w-full text-left px-5 py-3 text-xs text-gray-300 hover:bg-atlas-primary/10 hover:text-atlas-primary transition-colors border-l-2 border-transparent hover:border-atlas-primary">Institute Signup</Link>
                     </Dropdown>
                 </div>
                 
@@ -183,13 +184,13 @@ const Navbar: React.FC<NavbarProps> = ({ activeSection, scrollToSection }) => {
             </div>
 
             {/* Mobile/Tablet Nav Menu - Slide Down/Fade */}
+            {/* Positioned absolute top-full to push content or overlay correctly without calculating heights manually */}
             <div 
-                className={`lg:hidden absolute top-full left-0 right-0 bg-atlas-dark/95 backdrop-blur-xl border-t border-white/10 overflow-y-auto transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) ${
-                    isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-5 pointer-events-none'
+                className={`lg:hidden absolute top-full left-0 right-0 bg-atlas-dark/95 backdrop-blur-xl border-t border-white/10 shadow-2xl overflow-y-auto transition-all duration-500 ease-in-out origin-top ${
+                    isOpen ? 'max-h-screen opacity-100 visible' : 'max-h-0 opacity-0 invisible'
                 }`}
-                style={{ height: 'calc(100vh - 100%)' }}
             >
-                <nav className="px-6 py-8 pb-24 space-y-2 flex flex-col max-w-md mx-auto">
+                <nav className="px-6 py-8 pb-32 space-y-2 flex flex-col max-w-xl mx-auto h-[calc(100vh-80px)] overflow-y-auto">
                     {/* Navigation Links */}
                     {NAV_LINKS.map((link) => {
                         const isActive = activeSection === link.href;

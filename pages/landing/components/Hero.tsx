@@ -8,7 +8,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ scrollToSection }) => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-44">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-40 md:pt-24 lg:pt-52">
       {/* Background with Parallax Effect */}
       <div className="absolute inset-0 z-0">
         <img

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useData } from '../../../../contexts/DataContext';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { getStudyTips } from '../../../../services/geminiService';
-import { ChevronDownIcon, ChevronUpIcon, StarIcon, SparklesIcon } from '../../../../components/icons';
+import { ChevronDownIcon, ChevronUpIcon, StarIcon, SparklesIcon, XIcon, CheckCircleIcon } from '../../../../components/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 // Green/Emerald Palette for Charts
@@ -14,6 +14,7 @@ const Results: React.FC = () => {
     const [selectedTestForTips, setSelectedTestForTips] = useState<string | null>(null);
     const [tips, setTips] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
+    const [viewingDetailsId, setViewingDetailsId] = useState<string | null>(null);
     
     const { tests, results } = useData();
     const { user } = useAuth()!;
@@ -42,8 +43,92 @@ const Results: React.FC = () => {
         window.print();
     }
 
+    // --- Modal for Detailed Review ---
+    const DetailedReviewModal = () => {
+        if (!viewingDetailsId) return null;
+        
+        const result = studentResults.find(r => r.testId === viewingDetailsId);
+        const test = tests.find(t => t.id === viewingDetailsId);
+        if (!result || !test || !test.questions) return null;
+
+        const answers = result.studentAnswers || {};
+
+        return (
+            <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fade-in-up" style={{animationDuration: '0.2s'}}>
+                <div className="bg-atlas-gray w-full max-w-4xl h-[90vh] rounded-2xl flex flex-col border border-gray-700 shadow-2xl relative">
+                    <div className="flex justify-between items-center p-6 border-b border-gray-700 bg-atlas-black/50 rounded-t-2xl">
+                         <div>
+                             <h3 className="text-xl font-bold text-white">Test Review: {test.title}</h3>
+                             <p className="text-sm text-gray-400">Score: {result.score}/{result.maxScore} • {test.questions.length} Questions</p>
+                         </div>
+                         <button onClick={() => setViewingDetailsId(null)} className="p-2 hover:bg-gray-700 rounded-full text-gray-400 hover:text-white transition">
+                             <XIcon className="h-6 w-6" />
+                         </button>
+                    </div>
+                    
+                    <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                        {test.questions.map((q, idx) => {
+                            const userAnswer = answers[idx.toString()];
+                            const isCorrect = userAnswer === q.answer;
+                            const isSkipped = !userAnswer;
+
+                            return (
+                                <div key={idx} className={`p-6 rounded-xl border ${isCorrect ? 'bg-emerald-900/10 border-emerald-900/50' : isSkipped ? 'bg-gray-800/30 border-gray-700' : 'bg-red-900/10 border-red-900/50'}`}>
+                                    <div className="flex items-start gap-3 mb-4">
+                                        <span className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg font-bold text-sm ${isCorrect ? 'bg-emerald-500 text-white' : isSkipped ? 'bg-gray-600 text-white' : 'bg-red-500 text-white'}`}>
+                                            {idx + 1}
+                                        </span>
+                                        <p className="text-lg font-medium text-gray-200">{q.question}</p>
+                                    </div>
+                                    
+                                    {q.diagramSvg && (
+                                         <div className="ml-11 mb-4 p-4 bg-white rounded-lg flex items-center justify-center border border-gray-600 max-w-sm">
+                                             <div 
+                                                className="w-full"
+                                                dangerouslySetInnerHTML={{ __html: q.diagramSvg }} 
+                                             />
+                                         </div>
+                                    )}
+
+                                    <div className="grid md:grid-cols-2 gap-4 text-sm ml-11">
+                                        <div className="p-3 bg-atlas-black rounded-lg border border-gray-700">
+                                            <span className="block text-gray-500 text-xs uppercase tracking-wider mb-1">Your Answer</span>
+                                            <span className={`font-bold ${isCorrect ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                {userAnswer || '(Skipped)'}
+                                            </span>
+                                        </div>
+                                        <div className="p-3 bg-atlas-black rounded-lg border border-gray-700">
+                                            <span className="block text-gray-500 text-xs uppercase tracking-wider mb-1">Correct Answer</span>
+                                            <span className="font-bold text-emerald-400">{q.answer}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    {q.diagramDescription && !q.diagramSvg && (
+                                        <div className="ml-11 mt-4 p-3 bg-black/20 rounded border border-gray-800 text-xs text-gray-500 italic">
+                                            Diagram: {q.diagramDescription}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                    
+                    <div className="p-6 border-t border-gray-700 bg-atlas-black/50 rounded-b-2xl text-right">
+                        <button onClick={() => setViewingDetailsId(null)} className="px-6 py-2 bg-atlas-primary text-white font-bold rounded-lg hover:bg-emerald-600 transition">
+                            Close Review
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+
     return (
         <div>
+            {/* Modal */}
+            <DetailedReviewModal />
+            
             <div className="flex justify-between items-center mb-6 print:hidden">
                 <h2 className="text-2xl font-bold text-atlas-primary">My Results & Analysis</h2>
                 <button onClick={handlePrint} className="bg-atlas-primary text-white font-bold py-2 px-4 rounded-md hover:bg-emerald-600 transition">
@@ -54,6 +139,7 @@ const Results: React.FC = () => {
                 {studentResults.length > 0 ? studentResults.map(result => {
                     const test = tests.find(t => t.id === result.testId);
                     const isExpanded = expandedTestId === result.testId;
+                    const canReview = test?.questions && test.questions.length > 0 && result.studentAnswers;
                     
                     // Process Subject Data for Chart
                     const subjectData = result.subjectBreakdown 
@@ -111,6 +197,18 @@ const Results: React.FC = () => {
                             {/* Expanded Analysis View */}
                             {isExpanded && (
                                 <div className="p-6 bg-black/40 border-t border-gray-800 animate-fade-in-up">
+                                    {canReview && (
+                                        <div className="mb-6 flex justify-end">
+                                             <button 
+                                                onClick={(e) => { e.stopPropagation(); setViewingDetailsId(result.testId); }}
+                                                className="flex items-center gap-2 bg-white text-black font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition shadow-lg"
+                                             >
+                                                 <CheckCircleIcon className="h-5 w-5" />
+                                                 Review Answers
+                                             </button>
+                                        </div>
+                                    )}
+
                                     <div className="grid md:grid-cols-2 gap-8">
                                         
                                         {/* Left Column: Chart */}

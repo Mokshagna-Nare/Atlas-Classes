@@ -37,7 +37,7 @@ const Courses: React.FC = () => {
              <div className="w-24 h-1.5 bg-atlas-primary mx-auto rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
              <p className="mt-6 text-gray-400 max-w-2xl mx-auto text-lg">Designed to build a robust academic foundation for future success.</p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
           {COURSES_DATA.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}

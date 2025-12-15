@@ -2,19 +2,18 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { LogoutIcon, SparklesIcon, ChartBarIcon, DocumentTextIcon, ClipboardCheckIcon, DocumentDuplicateIcon, MenuIcon, XIcon } from '../../../components/icons';
+import { LogoutIcon, ChartBarIcon, DocumentTextIcon, ClipboardCheckIcon, DocumentDuplicateIcon, MenuIcon, XIcon, DocumentTextIcon as SharedIcon } from '../../../components/icons';
 import Tests from './components/Tests';
 import Results from './components/Results';
 import Analysis from './components/Analysis';
 import QuestionPapers from './components/QuestionPapers';
-import AIPaperGenerator from './components/AIPaperGenerator';
 import SharedPapers from './components/SharedPapers';
 
-type DashboardView = 'tests' | 'papers' | 'results' | 'analysis' | 'ai-generator' | 'shared-papers';
+type DashboardView = 'tests' | 'papers' | 'results' | 'analysis' | 'shared-papers';
 
 const InstituteDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeView, setActiveView] = useState<DashboardView>('ai-generator');
+  const [activeView, setActiveView] = useState<DashboardView>('analysis');
   const { user, logout } = useAuth()!;
   const navigate = useNavigate();
 
@@ -25,13 +24,12 @@ const InstituteDashboard: React.FC = () => {
 
   const renderContent = () => {
     switch (activeView) {
-      case 'ai-generator': return <AIPaperGenerator />;
       case 'analysis': return <Analysis />;
       case 'results': return <Results />;
       case 'tests': return <Tests />;
       case 'papers': return <QuestionPapers />;
       case 'shared-papers': return <SharedPapers />;
-      default: return <AIPaperGenerator />;
+      default: return <Analysis />;
     }
   };
 
@@ -72,12 +70,11 @@ const InstituteDashboard: React.FC = () => {
             </button>
         </div>
         <nav className="flex-grow space-y-2">
-            <NavItem view="ai-generator" label="AI Paper Generator" icon={<SparklesIcon className="h-5 w-5" />} />
             <NavItem view="analysis" label="Analysis" icon={<ChartBarIcon className="h-5 w-5" />} />
             <NavItem view="results" label="Results" icon={<DocumentTextIcon className="h-5 w-5" />} />
             <NavItem view="tests" label="Tests" icon={<ClipboardCheckIcon className="h-5 w-5" />} />
             <NavItem view="papers" label="Question Papers" icon={<DocumentDuplicateIcon className="h-5 w-5" />} />
-            <NavItem view="shared-papers" label="Shared Papers" icon={<DocumentTextIcon className="h-5 w-5" />} />
+            <NavItem view="shared-papers" label="Shared Papers" icon={<SharedIcon className="h-5 w-5" />} />
         </nav>
         <div className="mt-auto">
           <button onClick={handleLogout} className="w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-md bg-gray-800 hover:bg-red-900/30 text-gray-300 hover:text-red-400 transition-colors">

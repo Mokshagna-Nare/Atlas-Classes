@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -7,20 +8,25 @@ const InstituteSignup: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
   const navigate = useNavigate();
   const auth = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setLocalError('Passwords do not match.');
       return;
     }
-    // Mock signup logic
-    console.log('Signing up institute:', { instituteName, email, password });
-    auth?.login({ id: 'i_new', name: instituteName, role: 'institute' });
-    navigate('/dashboard/institute');
+    
+    try {
+        await auth?.signup({ name: instituteName, email, password, role: 'institute' });
+        // After signup, attempt login automatically or redirect to login page
+        await auth?.login({ email, password }, 'institute');
+        navigate('/dashboard/institute');
+    } catch (err: any) {
+        setLocalError(err.response?.data?.message || 'Signup failed');
+    }
   };
 
   return (
@@ -72,9 +78,9 @@ const InstituteSignup: React.FC = () => {
               required
             />
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button type="submit" className="w-full bg-atlas-orange text-white font-bold py-3 px-6 rounded-md hover:bg-orange-600 transition duration-300">
-            Register Institute
+          {localError && <p className="text-red-500 text-sm">{localError}</p>}
+          <button type="submit" disabled={auth?.isLoading} className="w-full bg-atlas-orange text-white font-bold py-3 px-6 rounded-md hover:bg-orange-600 transition duration-300 disabled:opacity-50">
+            {auth?.isLoading ? 'Creating Account...' : 'Register Institute'}
           </button>
         </form>
         <p className="text-center text-gray-400 mt-4 text-sm">

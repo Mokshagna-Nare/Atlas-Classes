@@ -1,3 +1,4 @@
+
 /* 
  * Atlas Classes - Dark Theme Design System 
  * Single Source of Truth for Colors, Typography, and Components
@@ -39,6 +40,7 @@
 /* Global Reset & Base Styles */
 html {
     scroll-behavior: smooth;
+    /* Removed explicit font-size to restore original scaling */
 }
 
 body {

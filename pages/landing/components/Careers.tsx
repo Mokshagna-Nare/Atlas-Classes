@@ -46,7 +46,7 @@ const Careers: React.FC = () => {
                   <div className="absolute inset-0 h-full w-full scale-0 rounded-full transition-all duration-300 group-hover:scale-100 group-hover:bg-emerald-600"></div>
                 </Link>
                 <p className="mt-6 text-sm text-gray-500">
-                    Join <span className="text-white font-bold">15+</span> experts making an impact.
+                    Join <span className="text-white font-bold">Our expert team</span> making an impact.
                 </p>
             </div>
         </div>

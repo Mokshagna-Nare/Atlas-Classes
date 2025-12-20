@@ -1,5 +1,6 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Test, TestResult, Payment, Institute, AdminQuestionPaper } from '../types';
+import { Test, TestResult, Payment, Institute, AdminQuestionPaper, MCQ } from '../types';
 import { STUDENT_TESTS, ALL_RESULTS, STUDENT_PAYMENTS, INSTITUTES_DATA, ADMIN_QUESTION_PAPERS } from '../constants';
 
 interface DataContextType {
@@ -8,6 +9,7 @@ interface DataContextType {
   payments: Payment[];
   institutes: Institute[];
   adminQuestionPapers: AdminQuestionPaper[];
+  mcqBank: MCQ[];
   addTest: (test: Test) => void;
   editTest: (updatedTest: Test) => void;
   deleteTest: (testId: string) => void;
@@ -18,6 +20,7 @@ interface DataContextType {
   addAdminQuestionPaper: (paper: AdminQuestionPaper) => void;
   addInstitute: (institute: Omit<Institute, 'id'>) => void;
   deleteInstitute: (instituteId: string) => void;
+  addMCQ: (mcq: MCQ) => void;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -28,6 +31,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [payments, setPayments] = useState<Payment[]>(STUDENT_PAYMENTS);
   const [institutes, setInstitutes] = useState<Institute[]>(INSTITUTES_DATA);
   const [adminQuestionPapers, setAdminQuestionPapers] = useState<AdminQuestionPaper[]>(ADMIN_QUESTION_PAPERS);
+  const [mcqBank, setMcqBank] = useState<MCQ[]>([]);
 
   const addTest = (newTest: Test) => {
     setTests(prevTests => [...prevTests, newTest]);
@@ -42,7 +46,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const addTestResult = (newResult: TestResult) => {
-    setResults(prevResults => [...prevResults, newResult]);
+    setResults(prevTests => [...prevTests, newResult]);
     // Also update ALL_RESULTS for the analysis page to use it
     // In a real app this would be a single source of truth
     ALL_RESULTS.push(newResult);
@@ -76,6 +80,10 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setInstitutes(prev => prev.filter(inst => inst.id !== instituteId));
   };
 
+  const addMCQ = (mcq: MCQ) => {
+    setMcqBank(prev => [...prev, mcq]);
+  };
+
   return (
     <DataContext.Provider value={{ 
         tests, 
@@ -83,6 +91,7 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         payments, 
         institutes,
         adminQuestionPapers,
+        mcqBank,
         addTest, 
         editTest, 
         deleteTest, 
@@ -92,7 +101,8 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         updateInstitute,
         addAdminQuestionPaper,
         addInstitute,
-        deleteInstitute
+        deleteInstitute,
+        addMCQ
     }}>
       {children}
     </DataContext.Provider>

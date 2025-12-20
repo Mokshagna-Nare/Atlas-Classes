@@ -61,6 +61,13 @@ export interface Question {
   diagramSvg?: string; // AI generated SVG code for the diagram
 }
 
+export interface MCQ extends Question {
+  subject: string;
+  topic: string;
+  difficulty: string;
+  marks: number;
+}
+
 export interface Test {
     id: string;
     title: string;

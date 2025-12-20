@@ -2,12 +2,23 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { LogoutIcon, MenuIcon, XIcon, UserGroupIcon, ClipboardDocumentListIcon, SparklesIcon } from '../../../components/icons';
+import { 
+  LogoutIcon, 
+  MenuIcon, 
+  XIcon, 
+  UserGroupIcon, 
+  ClipboardDocumentListIcon, 
+  SparklesIcon, 
+  PlusIcon,
+  PencilSquareIcon
+} from '../../../components/icons';
 import ManageInstitutes from './components/ManageInstitutes';
 import UploadPaper from './components/UploadPaper';
 import AIPaperGenerator from './components/AIPaperGenerator';
+import MCQUpload from './components/MCQUpload';
+import CreateTest from './components/CreateTest';
 
-type DashboardView = 'institutes' | 'papers' | 'ai-generator';
+type DashboardView = 'institutes' | 'papers' | 'ai-generator' | 'mcq-upload' | 'create-test';
 
 const AdminDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -25,6 +36,8 @@ const AdminDashboard: React.FC = () => {
       case 'ai-generator': return <AIPaperGenerator />;
       case 'institutes': return <ManageInstitutes />;
       case 'papers': return <UploadPaper />;
+      case 'mcq-upload': return <MCQUpload />;
+      case 'create-test': return <CreateTest />;
       default: return <AIPaperGenerator />;
     }
   };
@@ -67,6 +80,8 @@ const AdminDashboard: React.FC = () => {
         </div>
         <nav className="flex-grow space-y-2">
             <NavItem view="ai-generator" label="Upload & Assign Test" icon={<SparklesIcon className="h-5 w-5" />} />
+            <NavItem view="mcq-upload" label="MCQ Upload" icon={<PlusIcon className="h-5 w-5" />} />
+            <NavItem view="create-test" label="Create Online Test" icon={<PencilSquareIcon className="h-5 w-5" />} />
             <NavItem view="papers" label="Share Papers (Docs)" icon={<ClipboardDocumentListIcon className="h-5 w-5" />} />
             <NavItem view="institutes" label="Manage Institutes" icon={<UserGroupIcon className="h-5 w-5" />} />
         </nav>

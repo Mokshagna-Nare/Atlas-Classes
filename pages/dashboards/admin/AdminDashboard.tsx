@@ -10,19 +10,23 @@ import {
   ClipboardDocumentListIcon, 
   SparklesIcon, 
   PlusIcon,
-  PencilSquareIcon
+  PencilSquareIcon,
+  Squares2X2Icon
 } from '../../../components/icons';
 import ManageInstitutes from './components/ManageInstitutes';
 import UploadPaper from './components/UploadPaper';
 import AIPaperGenerator from './components/AIPaperGenerator';
 import MCQUpload from './components/MCQUpload';
 import CreateTest from './components/CreateTest';
+import QuestionBank from './components/QuestionBank';
+import { MCQ } from '../../../types';
 
-type DashboardView = 'institutes' | 'papers' | 'ai-generator' | 'mcq-upload' | 'create-test';
+type DashboardView = 'institutes' | 'papers' | 'ai-generator' | 'mcq-upload' | 'create-test' | 'question-bank';
 
 const AdminDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeView, setActiveView] = useState<DashboardView>('ai-generator');
+  const [editingMcq, setEditingMcq] = useState<MCQ | null>(null);
   const { user, logout } = useAuth()!;
   const navigate = useNavigate();
 
@@ -31,13 +35,24 @@ const AdminDashboard: React.FC = () => {
     setTimeout(logout, 50);
   };
 
+  const handleEditMcq = (mcq: MCQ) => {
+    setEditingMcq(mcq);
+    setActiveView('mcq-upload');
+  };
+
+  const handleFinishedMcqEdit = () => {
+    setEditingMcq(null);
+    setActiveView('question-bank');
+  };
+
   const renderContent = () => {
     switch (activeView) {
       case 'ai-generator': return <AIPaperGenerator />;
       case 'institutes': return <ManageInstitutes />;
       case 'papers': return <UploadPaper />;
-      case 'mcq-upload': return <MCQUpload />;
+      case 'mcq-upload': return <MCQUpload editingMcq={editingMcq} onFinished={editingMcq ? handleFinishedMcqEdit : undefined} />;
       case 'create-test': return <CreateTest />;
+      case 'question-bank': return <QuestionBank onEdit={handleEditMcq} />;
       default: return <AIPaperGenerator />;
     }
   };
@@ -46,6 +61,7 @@ const AdminDashboard: React.FC = () => {
     <button
       onClick={() => {
           setActiveView(view);
+          setEditingMcq(null); // Reset edit state when switching views
           setIsSidebarOpen(false);
       }}
       className={`w-full text-left px-4 py-3 rounded-md transition-colors flex items-center space-x-3 ${
@@ -81,6 +97,7 @@ const AdminDashboard: React.FC = () => {
         <nav className="flex-grow space-y-2">
             <NavItem view="ai-generator" label="Upload & Assign Test" icon={<SparklesIcon className="h-5 w-5" />} />
             <NavItem view="mcq-upload" label="MCQ Upload" icon={<PlusIcon className="h-5 w-5" />} />
+            <NavItem view="question-bank" label="Question Bank" icon={<Squares2X2Icon className="h-5 w-5" />} />
             <NavItem view="create-test" label="Create Online Test" icon={<PencilSquareIcon className="h-5 w-5" />} />
             <NavItem view="papers" label="Share Papers (Docs)" icon={<ClipboardDocumentListIcon className="h-5 w-5" />} />
             <NavItem view="institutes" label="Manage Institutes" icon={<UserGroupIcon className="h-5 w-5" />} />
@@ -101,7 +118,7 @@ const AdminDashboard: React.FC = () => {
         </header>
         <header className="hidden md:block mb-8">
           <h1 className="text-3xl font-bold text-white">Admin Control Panel</h1>
-          <p className="text-gray-500">Manage institutes, exams, and educational materials.</p>
+          <p className="text-gray-500">Manage institutes, exams, and unflagged question bank.</p>
         </header>
         <div className="bg-atlas-soft p-4 sm:p-6 rounded-lg shadow-sm border border-gray-800">
           {renderContent()}

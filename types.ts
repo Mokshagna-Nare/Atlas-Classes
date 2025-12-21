@@ -66,6 +66,10 @@ export interface MCQ extends Question {
   topic: string;
   difficulty: string;
   marks: number;
+  isFlagged: boolean;
+  flagReason?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Test {

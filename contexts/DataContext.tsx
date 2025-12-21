@@ -21,6 +21,10 @@ interface DataContextType {
   addInstitute: (institute: Omit<Institute, 'id'>) => void;
   deleteInstitute: (instituteId: string) => void;
   addMCQ: (mcq: MCQ) => void;
+  updateMCQ: (id: string, updates: Partial<MCQ>) => void;
+  deleteMCQ: (id: string) => void;
+  flagMCQ: (id: string, reason?: string) => void;
+  unflagMCQ: (id: string) => void;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -47,8 +51,6 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const addTestResult = (newResult: TestResult) => {
     setResults(prevTests => [...prevTests, newResult]);
-    // Also update ALL_RESULTS for the analysis page to use it
-    // In a real app this would be a single source of truth
     ALL_RESULTS.push(newResult);
   };
 
@@ -84,6 +86,22 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setMcqBank(prev => [...prev, mcq]);
   };
 
+  const updateMCQ = (id: string, updates: Partial<MCQ>) => {
+    setMcqBank(prev => prev.map(m => m.id === id ? { ...m, ...updates, updatedAt: new Date().toISOString() } : m));
+  };
+
+  const deleteMCQ = (id: string) => {
+    setMcqBank(prev => prev.filter(m => m.id !== id));
+  };
+
+  const flagMCQ = (id: string, reason?: string) => {
+    updateMCQ(id, { isFlagged: true, flagReason: reason });
+  };
+
+  const unflagMCQ = (id: string) => {
+    updateMCQ(id, { isFlagged: false, flagReason: undefined });
+  };
+
   return (
     <DataContext.Provider value={{ 
         tests, 
@@ -102,7 +120,11 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         addAdminQuestionPaper,
         addInstitute,
         deleteInstitute,
-        addMCQ
+        addMCQ,
+        updateMCQ,
+        deleteMCQ,
+        flagMCQ,
+        unflagMCQ
     }}>
       {children}
     </DataContext.Provider>

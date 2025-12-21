@@ -20,11 +20,11 @@ router.post('/convert-html', async (req, res) => {
         3. Generate SVG for diagrams in 'diagramSvg' field.
         4. Return ONLY JSON.`;
 
+        // Always use gemini-3-pro-preview for complex reasoning and structured data generation tasks
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: [
-                { text: `Extract questions from this HTML: \n\n ${htmlContent}` }
-            ],
+            model: 'gemini-3-pro-preview',
+            // Simple string prompt for text tasks
+            contents: `Extract questions from this HTML: \n\n ${htmlContent}`,
             config: {
                 systemInstruction: systemInstruction,
                 responseMimeType: "application/json",
@@ -54,6 +54,7 @@ router.post('/convert-html', async (req, res) => {
         // Handle possible parsing errors if AI returns slight deviations
         let jsonResponse;
         try {
+            // response.text is a property directly returning the extracted string output
             jsonResponse = JSON.parse(response.text);
         } catch (e) {
             console.error("JSON Parse Error:", response.text);

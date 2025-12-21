@@ -1,11 +1,16 @@
 
-import React, { useState } from 'react';
-import { PlusIcon, TrashIcon, CloudArrowUpIcon } from '../../../../components/icons';
+import React, { useState, useEffect } from 'react';
+import { PlusIcon, TrashIcon, CloudArrowUpIcon, FlagIcon } from '../../../../components/icons';
 import { useData } from '../../../../contexts/DataContext';
 import { MCQ } from '../../../../types';
 
-const MCQUpload: React.FC = () => {
-  const { addMCQ } = useData();
+interface MCQUploadProps {
+  editingMcq?: MCQ | null;
+  onFinished?: () => void;
+}
+
+const MCQUpload: React.FC<MCQUploadProps> = ({ editingMcq, onFinished }) => {
+  const { addMCQ, updateMCQ } = useData();
   const [options, setOptions] = useState<string[]>(['', '', '', '']);
   const [subject, setSubject] = useState('Physics');
   const [topic, setTopic] = useState('');
@@ -14,6 +19,23 @@ const MCQUpload: React.FC = () => {
   const [question, setQuestion] = useState('');
   const [correctAnswer, setCorrectAnswer] = useState('');
   const [explanation, setExplanation] = useState('');
+  const [isFlagged, setIsFlagged] = useState(false);
+  const [flagReason, setFlagReason] = useState('');
+
+  useEffect(() => {
+    if (editingMcq) {
+      setQuestion(editingMcq.question);
+      setOptions(editingMcq.options || ['', '', '', '']);
+      setCorrectAnswer(editingMcq.answer);
+      setExplanation(editingMcq.explanation || '');
+      setSubject(editingMcq.subject);
+      setTopic(editingMcq.topic);
+      setDifficulty(editingMcq.difficulty);
+      setMarks(editingMcq.marks.toString());
+      setIsFlagged(editingMcq.isFlagged);
+      setFlagReason(editingMcq.flagReason || '');
+    }
+  }, [editingMcq]);
 
   const handleAddOption = () => {
     setOptions([...options, '']);
@@ -30,61 +52,71 @@ const MCQUpload: React.FC = () => {
     setOptions(newOptions);
   };
 
-  const handleSaveDraft = () => {
-    console.log("Draft Saved:", { subject, topic, difficulty, marks, question, options, correctAnswer, explanation });
-    alert("Draft saved to console.");
-  };
-
   const handleSubmit = () => {
     if (!question || !correctAnswer) {
       alert("Please fill in the question and correct answer.");
       return;
     }
 
-    const newMCQ: MCQ = {
-      id: `mcq-${Date.now()}`,
+    const mcqData = {
       question,
-      type: 'Multiple Choice',
+      type: 'Multiple Choice' as const,
       options: options.filter(opt => opt.trim() !== ''),
       answer: correctAnswer,
       explanation,
       subject,
       topic,
       difficulty,
-      marks: parseInt(marks) || 1
+      marks: parseInt(marks) || 1,
+      isFlagged,
+      flagReason: isFlagged ? flagReason : ''
     };
 
-    addMCQ(newMCQ);
-    console.log("Submitted to Database:", newMCQ);
-    alert("Question successfully added to MCQ Bank!");
+    if (editingMcq) {
+      updateMCQ(editingMcq.id!, mcqData);
+      alert("Question updated successfully!");
+    } else {
+      const newMCQ: MCQ = {
+        ...mcqData,
+        id: `mcq-${Date.now()}`,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      addMCQ(newMCQ);
+      alert("Question successfully added to MCQ Bank!");
+    }
     
-    // Clear form
-    setQuestion('');
-    setCorrectAnswer('');
-    setExplanation('');
-    setOptions(['', '', '', '']);
+    if (onFinished) {
+      onFinished();
+    } else {
+      // Clear form for next entry if not in edit mode
+      setQuestion('');
+      setCorrectAnswer('');
+      setExplanation('');
+      setOptions(['', '', '', '']);
+      setIsFlagged(false);
+      setFlagReason('');
+    }
   };
 
   return (
     <div className="max-w-4xl mx-auto reveal-on-scroll">
       <div className="flex flex-col space-y-8">
-        {/* Header Area */}
         <div>
-          <h2 className="text-3xl font-extrabold text-white mb-2">MCQ Upload Panel</h2>
-          <p className="text-atlas-text-muted text-sm uppercase tracking-widest font-semibold">New Online Quiz Item</p>
+          <h2 className="text-3xl font-extrabold text-white mb-2">{editingMcq ? 'Edit Question' : 'MCQ Upload Panel'}</h2>
+          <p className="text-atlas-text-muted text-sm uppercase tracking-widest font-semibold">{editingMcq ? 'Update existing content' : 'New Online Quiz Item'}</p>
         </div>
 
         <div className="bg-atlas-soft/40 backdrop-blur-xl border border-gray-800 rounded-3xl p-6 md:p-10 shadow-2xl">
           <form className="space-y-10" onSubmit={(e) => e.preventDefault()}>
             
-            {/* Metadata Section: Row 1 */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="space-y-2">
                 <label className="text-xs font-bold text-atlas-text-muted uppercase tracking-wider ml-1">Subject</label>
                 <select 
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-all text-white appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary transition-all text-white appearance-none cursor-pointer"
                 >
                   <option value="Physics">Physics</option>
                   <option value="Chemistry">Chemistry</option>
@@ -99,7 +131,7 @@ const MCQUpload: React.FC = () => {
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   placeholder="e.g. Thermodynamics"
-                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-all text-white placeholder-gray-600" 
+                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary text-white" 
                 />
               </div>
               <div className="space-y-2">
@@ -107,7 +139,7 @@ const MCQUpload: React.FC = () => {
                 <select 
                   value={difficulty}
                   onChange={(e) => setDifficulty(e.target.value)}
-                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-all text-white appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary text-white appearance-none cursor-pointer"
                 >
                   <option value="Easy">Easy</option>
                   <option value="Medium">Medium</option>
@@ -121,12 +153,11 @@ const MCQUpload: React.FC = () => {
                   value={marks}
                   onChange={(e) => setMarks(e.target.value)}
                   placeholder="1"
-                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-all text-white placeholder-gray-600" 
+                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary text-white" 
                 />
               </div>
             </div>
 
-            {/* Question Section */}
             <div className="space-y-2">
               <label className="text-xs font-bold text-atlas-text-muted uppercase tracking-wider ml-1">Question</label>
               <textarea 
@@ -134,11 +165,10 @@ const MCQUpload: React.FC = () => {
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
                 placeholder="Type the MCQ question here..."
-                className="w-full px-4 py-4 bg-atlas-dark border border-gray-700 rounded-2xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-all text-white placeholder-gray-600 resize-none"
+                className="w-full px-4 py-4 bg-atlas-dark border border-gray-700 rounded-2xl focus:outline-none focus:border-atlas-primary text-white resize-none"
               />
             </div>
 
-            {/* Options Section */}
             <div className="space-y-4">
               <div className="flex justify-between items-center px-1">
                 <label className="text-xs font-bold text-atlas-text-muted uppercase tracking-wider">Options</label>
@@ -146,7 +176,7 @@ const MCQUpload: React.FC = () => {
               </div>
               <div className="grid gap-3">
                 {options.map((opt, idx) => (
-                  <div key={idx} className="flex items-center gap-3 animate-fade-in-up" style={{ animationDelay: `${idx * 0.05}s` }}>
+                  <div key={idx} className="flex items-center gap-3">
                     <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-atlas-gray text-[10px] font-bold text-atlas-primary border border-atlas-primary/20">
                       {idx + 1}
                     </div>
@@ -155,7 +185,7 @@ const MCQUpload: React.FC = () => {
                       value={opt}
                       onChange={(e) => handleOptionChange(idx, e.target.value)}
                       placeholder={`Option ${idx + 1}`}
-                      className="flex-1 px-4 py-3 bg-atlas-dark border border-gray-800 rounded-xl focus:outline-none focus:border-atlas-primary transition-all text-white placeholder-gray-700"
+                      className="flex-1 px-4 py-3 bg-atlas-dark border border-gray-800 rounded-xl focus:outline-none focus:border-atlas-primary text-white"
                     />
                     <button 
                       onClick={() => handleRemoveOption(idx)}
@@ -175,7 +205,6 @@ const MCQUpload: React.FC = () => {
               </button>
             </div>
 
-            {/* Answer & Explanation Section */}
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-2">
                 <label className="text-xs font-bold text-atlas-text-muted uppercase tracking-wider ml-1">Correct Answer</label>
@@ -184,7 +213,7 @@ const MCQUpload: React.FC = () => {
                   value={correctAnswer}
                   onChange={(e) => setCorrectAnswer(e.target.value)}
                   placeholder="Option No / Text"
-                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-all text-white placeholder-gray-600" 
+                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary text-white" 
                 />
               </div>
               <div className="space-y-2">
@@ -194,41 +223,57 @@ const MCQUpload: React.FC = () => {
                   value={explanation}
                   onChange={(e) => setExplanation(e.target.value)}
                   placeholder="Briefly explain the solution..."
-                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary focus:ring-1 focus:ring-atlas-primary transition-all text-white placeholder-gray-600 resize-none h-12"
+                  className="w-full px-4 py-3 bg-atlas-dark border border-gray-700 rounded-xl focus:outline-none focus:border-atlas-primary text-white resize-none h-12"
                 />
               </div>
             </div>
 
-            {/* Bulk Upload Section */}
-            <div className="pt-4">
-              <div className="relative group overflow-hidden bg-atlas-gray/20 border-2 border-dashed border-gray-700 rounded-2xl p-8 flex flex-col items-center justify-center transition-all hover:border-atlas-primary/50 hover:bg-atlas-gray/40">
-                <div className="bg-atlas-soft p-4 rounded-full mb-4 group-hover:scale-110 transition-transform duration-500 shadow-xl border border-gray-800">
-                  <CloudArrowUpIcon className="h-8 w-8 text-atlas-primary" />
+            {/* Flagging Section */}
+            <div className="pt-6 border-t border-gray-800 space-y-6">
+                <div className="flex items-center gap-4">
+                    <label className="relative inline-flex items-center cursor-pointer">
+                        <input 
+                            type="checkbox" 
+                            checked={isFlagged}
+                            onChange={(e) => setIsFlagged(e.target.checked)}
+                            className="sr-only peer" 
+                        />
+                        <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                        <span className="ml-3 text-sm font-bold text-gray-300 flex items-center gap-2">
+                            <FlagIcon className={`h-4 w-4 ${isFlagged ? 'text-red-500 animate-pulse' : 'text-gray-600'}`} />
+                            Flag this question
+                        </span>
+                    </label>
                 </div>
-                <h4 className="text-white font-bold text-lg mb-1">Bulk Upload via Excel / CSV</h4>
-                <p className="text-atlas-text-muted text-xs mb-6">Import hundreds of questions at once</p>
                 
-                <label className="relative cursor-pointer">
-                  <span className="bg-white text-black font-bold text-xs uppercase tracking-widest px-8 py-3 rounded-full hover:bg-gray-200 transition-colors shadow-lg">Choose File</span>
-                  <input type="file" className="hidden" accept=".csv,.xlsx,.xls" />
-                </label>
-                <p className="mt-4 text-[10px] text-gray-600">No file chosen</p>
-              </div>
+                {isFlagged && (
+                    <div className="space-y-2 animate-fade-in-up">
+                        <label className="text-xs font-bold text-atlas-text-muted uppercase tracking-wider ml-1">Flag Reason (Optional)</label>
+                        <textarea 
+                            rows={2}
+                            value={flagReason}
+                            onChange={(e) => setFlagReason(e.target.value)}
+                            placeholder="e.g. Question contains error, repetitive, or needs review..."
+                            className="w-full px-4 py-3 bg-red-900/10 border border-red-900/30 rounded-xl focus:outline-none focus:border-red-500 text-white placeholder-red-300/30 resize-none"
+                        />
+                    </div>
+                )}
             </div>
 
-            {/* Form Actions */}
             <div className="flex justify-end items-center gap-4 pt-6 border-t border-gray-800">
               <button 
-                onClick={handleSaveDraft}
+                onClick={() => onFinished?.()}
                 className="px-8 py-3 bg-transparent text-gray-400 font-bold text-sm uppercase tracking-widest rounded-xl hover:bg-white/5 hover:text-white transition-all border border-transparent hover:border-gray-700"
               >
-                Save Draft
+                {editingMcq ? 'Cancel' : 'Reset'}
               </button>
               <button 
                 onClick={handleSubmit}
-                className="px-10 py-4 bg-atlas-primary text-white font-bold text-sm uppercase tracking-widest rounded-xl shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(16,185,129,0.6)] hover:bg-emerald-500 hover:-translate-y-1 transition-all duration-300 active:scale-95"
+                className={`px-10 py-4 font-bold text-sm uppercase tracking-widest rounded-xl transition-all duration-300 active:scale-95 ${
+                    editingMcq ? 'bg-white text-black hover:bg-gray-200' : 'bg-atlas-primary text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_35px_rgba(16,185,129,0.6)] hover:bg-emerald-500 hover:-translate-y-1'
+                }`}
               >
-                Submit to Database
+                {editingMcq ? 'Update Question' : 'Submit to Database'}
               </button>
             </div>
 

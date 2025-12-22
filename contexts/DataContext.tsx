@@ -37,94 +37,33 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [adminQuestionPapers, setAdminQuestionPapers] = useState<AdminQuestionPaper[]>(ADMIN_QUESTION_PAPERS);
   const [mcqBank, setMcqBank] = useState<MCQ[]>([]);
 
-  const addTest = (newTest: Test) => {
-    setTests(prevTests => [...prevTests, newTest]);
-  };
-
-  const editTest = (updatedTest: Test) => {
-    setTests(prevTests => prevTests.map(test => test.id === updatedTest.id ? updatedTest : test));
-  };
-
-  const deleteTest = (testId: string) => {
-    setTests(prevTests => prevTests.filter(test => test.id !== testId));
-  };
-
-  const addTestResult = (newResult: TestResult) => {
-    setResults(prevTests => [...prevTests, newResult]);
-    ALL_RESULTS.push(newResult);
-  };
-
-  const updateTestStatus = (testId: string, status: Test['status']) => {
-      setTests(prevTests => prevTests.map(t => t.id === testId ? {...t, status} : t));
-  }
-
-  const updatePaymentStatus = (paymentId: string, status: Payment['status']) => {
-    setPayments(prevPayments => prevPayments.map(p => p.id === paymentId ? {...p, status} : p));
-  }
-
-  const updateInstitute = (updatedInstitute: Institute) => {
-    setInstitutes(prev => prev.map(inst => inst.id === updatedInstitute.id ? updatedInstitute : inst));
-  };
-
-  const addAdminQuestionPaper = (paper: AdminQuestionPaper) => {
-    setAdminQuestionPapers(prev => [...prev, paper]);
-  };
-
+  const addTest = (newTest: Test) => setTests(prev => [...prev, newTest]);
+  const editTest = (updatedTest: Test) => setTests(prev => prev.map(t => t.id === updatedTest.id ? updatedTest : t));
+  const deleteTest = (testId: string) => setTests(prev => prev.filter(t => t.id !== testId));
+  const addTestResult = (newResult: TestResult) => setResults(prev => [...prev, newResult]);
+  const updateTestStatus = (testId: string, status: Test['status']) => setTests(prev => prev.map(t => t.id === testId ? {...t, status} : t));
+  const updatePaymentStatus = (paymentId: string, status: Payment['status']) => setPayments(prev => prev.map(p => p.id === paymentId ? {...p, status} : p));
+  const updateInstitute = (updatedInstitute: Institute) => setInstitutes(prev => prev.map(inst => inst.id === updatedInstitute.id ? updatedInstitute : inst));
+  const addAdminQuestionPaper = (paper: AdminQuestionPaper) => setAdminQuestionPapers(prev => [...prev, paper]);
   const addInstitute = (institute: Omit<Institute, 'id'>) => {
-    const newInstitute: Institute = {
-      id: `i${Date.now()}`,
-      ...institute,
-    };
-    setInstitutes(prev => [...prev, newInstitute]);
+    setInstitutes(prev => [...prev, { id: `i${Date.now()}`, ...institute }]);
   };
+  const deleteInstitute = (instituteId: string) => setInstitutes(prev => prev.filter(inst => inst.id !== instituteId));
 
-  const deleteInstitute = (instituteId: string) => {
-    setInstitutes(prev => prev.filter(inst => inst.id !== instituteId));
-  };
-
-  const addMCQ = (mcq: MCQ) => {
-    setMcqBank(prev => [...prev, mcq]);
-  };
-
+  const addMCQ = (mcq: MCQ) => setMcqBank(prev => [...prev, mcq]);
   const updateMCQ = (id: string, updates: Partial<MCQ>) => {
     setMcqBank(prev => prev.map(m => m.id === id ? { ...m, ...updates, updatedAt: new Date().toISOString() } : m));
   };
-
-  const deleteMCQ = (id: string) => {
-    setMcqBank(prev => prev.filter(m => m.id !== id));
-  };
-
-  const flagMCQ = (id: string, reason?: string) => {
-    updateMCQ(id, { isFlagged: true, flagReason: reason });
-  };
-
-  const unflagMCQ = (id: string) => {
-    updateMCQ(id, { isFlagged: false, flagReason: undefined });
-  };
+  const deleteMCQ = (id: string) => setMcqBank(prev => prev.filter(m => m.id !== id));
+  const flagMCQ = (id: string, reason?: string) => updateMCQ(id, { isFlagged: true, flagReason: reason });
+  const unflagMCQ = (id: string) => updateMCQ(id, { isFlagged: false, flagReason: undefined });
 
   return (
     <DataContext.Provider value={{ 
-        tests, 
-        results, 
-        payments, 
-        institutes,
-        adminQuestionPapers,
-        mcqBank,
-        addTest, 
-        editTest, 
-        deleteTest, 
-        addTestResult, 
-        updateTestStatus, 
-        updatePaymentStatus,
-        updateInstitute,
-        addAdminQuestionPaper,
-        addInstitute,
-        deleteInstitute,
-        addMCQ,
-        updateMCQ,
-        deleteMCQ,
-        flagMCQ,
-        unflagMCQ
+        tests, results, payments, institutes, adminQuestionPapers, mcqBank,
+        addTest, editTest, deleteTest, addTestResult, updateTestStatus, updatePaymentStatus,
+        updateInstitute, addAdminQuestionPaper, addInstitute, deleteInstitute,
+        addMCQ, updateMCQ, deleteMCQ, flagMCQ, unflagMCQ
     }}>
       {children}
     </DataContext.Provider>
@@ -133,8 +72,6 @@ export const DataProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 export const useData = (): DataContextType => {
   const context = useContext(DataContext);
-  if (!context) {
-    throw new Error('useData must be used within a DataProvider');
-  }
+  if (!context) throw new Error('useData must be used within a DataProvider');
   return context;
 };

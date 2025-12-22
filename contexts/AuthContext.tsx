@@ -1,7 +1,13 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User } from '../types';
-import api from '../services/api';
+import { createClient } from '@supabase/supabase-js';
+
+// Configuration: Usually loaded from environment variables
+const supabase = createClient(
+  'https://YOUR_PROJECT_URL.supabase.co',
+  'YOUR_ANON_KEY'
+);
 
 interface AuthContextType {
   user: User | null;
@@ -20,66 +26,55 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check for existing token on load
-    const token = localStorage.getItem('atlas-token');
-    const storedUser = localStorage.getItem('atlas-user');
-    
-    if (token && storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        // Fetch custom profile data (role, instituteId)
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single();
+
+        setUser({
+          id: session.user.id,
+          name: profile?.name || session.user.user_metadata.name,
+          role: profile?.role || 'student',
+          instituteId: profile?.institute_id
+        });
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const login = async (credentials: any, role: string) => {
     setIsLoading(true);
     setError(null);
-
-    // --- DEMO CREDENTIALS INTERCEPTION (Client-Side Override) ---
-    // This guarantees login works for testing even if the backend is down
-    const { email, password } = credentials;
-    let demoUser: User | null = null;
-    let demoToken = 'demo-token-static';
-
-    if (email === 'student@atlas.com' && password === 'password') {
-        demoUser = { id: 's1', name: 'Riya Sharma', role: 'student', instituteId: 'i1' };
-    } else if (email === 'institute@atlas.com' && password === 'password') {
-        demoUser = { id: 'i1', name: 'ABC School', role: 'institute' };
-    } else if (email === 'admin@atlas.com' && password === 'password') {
-        demoUser = { id: 'admin-id', name: 'Administrator', role: 'admin' };
-    }
-
-    if (demoUser) {
-        // Simulate network delay for realism
-        await new Promise(resolve => setTimeout(resolve, 500));
-
-        if (demoUser.role !== role && role !== 'any') {
-             setError(`Unauthorized. This login is for ${role}s only.`);
-             setIsLoading(false);
-             return;
-        }
-
-        localStorage.setItem('atlas-token', demoToken);
-        localStorage.setItem('atlas-user', JSON.stringify(demoUser));
-        setUser(demoUser);
-        setIsLoading(false);
-        return; // Return early to skip backend call
-    }
-    // -----------------------------------------------------------
-
     try {
-      const response = await api.post('/auth/login', { ...credentials });
-      
-      const { token, user } = response.data;
-      
-      if (user.role !== role && role !== 'any') {
-          throw new Error(`Unauthorized. This login is for ${role}s only.`);
-      }
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email: credentials.email,
+        password: credentials.password,
+      });
 
-      localStorage.setItem('atlas-token', token);
-      localStorage.setItem('atlas-user', JSON.stringify(user));
-      setUser(user);
+      if (authError) throw authError;
+
+      // Verify role after login
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+
+      if (profile?.role !== role && role !== 'any') {
+        await supabase.auth.signOut();
+        throw new Error(`Unauthorized. This login is for ${role}s only.`);
+      }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.message);
       throw err;
     } finally {
       setIsLoading(false);
@@ -87,22 +82,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const signup = async (userData: any) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-          await api.post('/auth/signup', userData);
-          // Auto login after signup could go here, or redirect to login
-      } catch (err: any) {
-          setError(err.response?.data?.message || 'Signup failed');
-          throw err;
-      } finally {
-          setIsLoading(false);
-      }
-  }
+    setIsLoading(true);
+    setError(null);
+    try {
+      const { error: authError } = await supabase.auth.signUp({
+        email: userData.email,
+        password: userData.password,
+        options: {
+          data: {
+            name: userData.name,
+            role: userData.role,
+            institute_id: userData.instituteId
+          }
+        }
+      });
+      if (authError) throw authError;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  const logout = () => {
-    localStorage.removeItem('atlas-token');
-    localStorage.removeItem('atlas-user');
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
   };
 
@@ -113,6 +117,4 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-export const useAuth = (): AuthContextType | null => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);

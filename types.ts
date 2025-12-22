@@ -6,6 +6,39 @@ export interface User {
   instituteId?: string;
 }
 
+// Added Course interface to resolve export error
+export interface Course {
+  id: number;
+  title: string;
+  description: string;
+}
+
+// Added FacultyMember interface to resolve export error
+export interface FacultyMember {
+  id: number;
+  name: string;
+  subject: string;
+  subjects: string[];
+  photoUrl: string;
+  bio: string;
+}
+
+// Added Testimonial interface to resolve export error
+export interface Testimonial {
+  id: number;
+  quote: string;
+  author: string;
+  title: string;
+  rating: number;
+}
+
+// Added Student interface to resolve export error
+export interface Student {
+  id: string;
+  name: string;
+  instituteId: string;
+}
+
 export interface Institute {
   id: string;
   name: string;
@@ -21,46 +54,6 @@ export interface AdminQuestionPaper {
   mimeType: string;
 }
 
-export interface FacultyMember {
-  id: number;
-  name: string;
-  subject: string;
-  subjects: string[];
-  photoUrl: string;
-  bio: string;
-}
-
-export interface Testimonial {
-  id: number;
-  quote: string;
-  author: string;
-  title: string;
-  rating: number;
-}
-
-export interface Course {
-  id: number;
-  title: string;
-  description: string;
-}
-
-export interface Student {
-  id: string;
-  name: string;
-  instituteId: string;
-}
-
-export interface Question {
-  id?: string;
-  question: string;
-  type: 'Multiple Choice' | 'Short Answer' | 'True/False';
-  options?: string[];
-  answer: string;
-  explanation?: string;
-  diagramDescription?: string; // Text description of image if extracted
-  diagramSvg?: string; // AI generated SVG code for the diagram
-}
-
 export interface MCQ extends Question {
   subject: string;
   topic: string;
@@ -72,6 +65,17 @@ export interface MCQ extends Question {
   updatedAt: string;
 }
 
+export interface Question {
+  id?: string;
+  question: string;
+  type: 'Multiple Choice' | 'Short Answer' | 'True/False';
+  options?: string[];
+  answer: string;
+  explanation?: string;
+  diagramDescription?: string;
+  diagramSvg?: string;
+}
+
 export interface Test {
     id: string;
     title: string;
@@ -80,7 +84,28 @@ export interface Test {
     instituteId: string;
     subject: string;
     pdfFileName?: string;
-    questions?: Question[]; // Added to store parsed questions from PDF
+    questions?: Question[];
+    duration?: number;
+}
+
+// Backend-aligned Attempt structures
+export interface TestAttempt {
+    id: string;
+    testId: string;
+    studentId: string;
+    startedAt: string;
+    completedAt?: string;
+    status: 'in_progress' | 'completed' | 'expired';
+    score: number;
+    maxScore: number;
+    rank?: number;
+    answers?: AttemptAnswer[];
+}
+
+export interface AttemptAnswer {
+    questionIndex: number;
+    selectedOption: string;
+    isCorrect: boolean;
 }
 
 export interface TestResult {
@@ -96,7 +121,7 @@ export interface TestResult {
         maxScore: number;
       }
     };
-    studentAnswers?: Record<string, string>; // Maps question index (as string) to selected option
+    studentAnswers?: Record<string, string>;
 }
 
 export interface Payment {

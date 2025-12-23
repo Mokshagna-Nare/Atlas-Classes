@@ -11,7 +11,8 @@ import {
   SparklesIcon, 
   PlusIcon,
   PencilSquareIcon,
-  Squares2X2Icon
+  Squares2X2Icon,
+  ClipboardCheckIcon
 } from '../../../components/icons';
 import ManageInstitutes from './components/ManageInstitutes';
 import UploadPaper from './components/UploadPaper';
@@ -19,9 +20,10 @@ import AIPaperGenerator from './components/AIPaperGenerator';
 import MCQUpload from './components/MCQUpload';
 import CreateTest from './components/CreateTest';
 import QuestionBank from './components/QuestionBank';
+import ManageTests from './components/ManageTests';
 import { MCQ } from '../../../types';
 
-type DashboardView = 'institutes' | 'papers' | 'ai-generator' | 'mcq-upload' | 'create-test' | 'question-bank';
+type DashboardView = 'institutes' | 'papers' | 'ai-generator' | 'mcq-upload' | 'create-test' | 'question-bank' | 'tests';
 
 const AdminDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -53,6 +55,7 @@ const AdminDashboard: React.FC = () => {
       case 'mcq-upload': return <MCQUpload editingMcq={editingMcq} onFinished={editingMcq ? handleFinishedMcqEdit : undefined} />;
       case 'create-test': return <CreateTest />;
       case 'question-bank': return <QuestionBank onEdit={handleEditMcq} />;
+      case 'tests': return <ManageTests />;
       default: return <AIPaperGenerator />;
     }
   };
@@ -99,6 +102,7 @@ const AdminDashboard: React.FC = () => {
             <NavItem view="mcq-upload" label="MCQ Upload" icon={<PlusIcon className="h-5 w-5" />} />
             <NavItem view="question-bank" label="Question Bank" icon={<Squares2X2Icon className="h-5 w-5" />} />
             <NavItem view="create-test" label="Create Online Test" icon={<PencilSquareIcon className="h-5 w-5" />} />
+            <NavItem view="tests" label="Manage Tests" icon={<ClipboardCheckIcon className="h-5 w-5" />} />
             <NavItem view="papers" label="Share Papers (Docs)" icon={<ClipboardDocumentListIcon className="h-5 w-5" />} />
             <NavItem view="institutes" label="Manage Institutes" icon={<UserGroupIcon className="h-5 w-5" />} />
         </nav>

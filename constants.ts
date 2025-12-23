@@ -94,10 +94,7 @@ export const INSTITUTES_DATA: Institute[] = [
     { id: 'i3', name: 'Future Leaders Institute', email: 'contact@fli.org' },
 ];
 
-export const ADMIN_QUESTION_PAPERS: AdminQuestionPaper[] = [
-    { id: 'aqp1', subject: 'Physics', fileName: 'admin_physics_mechanics_final.pdf', accessibleInstituteIds: ['i1'], fileContent: 'VGhpcyBpcyBhIG1vY2sgUGh5c2ljcyBQREYgZmlsZS4=', mimeType: 'text/plain' },
-    { id: 'aqp2', subject: 'Chemistry', fileName: 'admin_chem_organic_basics.pdf', accessibleInstituteIds: ['i1', 'i2'], fileContent: 'VGhpcyBpcyBhIG1vY2sgQ2hlbWlzdHJ5IFBERiBmaWxlLg==', mimeType: 'text/plain' },
-];
+export const ADMIN_QUESTION_PAPERS: AdminQuestionPaper[] = [];
 
 export const INSTITUTE_STUDENTS: Student[] = [
     { id: 's1', name: 'Riya Sharma', instituteId: 'i1' },
@@ -106,77 +103,13 @@ export const INSTITUTE_STUDENTS: Student[] = [
     { id: 's4', name: 'Rohan Kumar', instituteId: 'i1' },
 ];
 
-export const STUDENT_TESTS: Test[] = [
-    { id: 't1', title: 'Foundation Series Test A', date: '2024-09-15', status: 'Completed', instituteId: 'i1', subject: 'IIT-JEE Pattern', pdfFileName: 'series-a-test.pdf' },
-    { id: 't2', title: 'Foundation Series Test B', date: '2024-09-22', status: 'Completed', instituteId: 'i1', subject: 'IIT-JEE Pattern', pdfFileName: 'series-b-test.pdf' },
-    { id: 't3', title: 'Foundation Series Test C', date: '2024-10-01', status: 'Assigned', instituteId: 'i1', subject: 'IIT-JEE Pattern', pdfFileName: 'series-c-test.pdf' },
-    { id: 't4', title: 'Biology Unit Test 1', date: '2024-10-10', status: 'Upcoming', instituteId: 'i1', subject: 'NEET Pattern', pdfFileName: 'biology-test-1.pdf' },
-];
+// Cleared dummy tests
+export const STUDENT_TESTS: Test[] = [];
 
-export const STUDENT_RESULTS: TestResult[] = [
-    { 
-      testId: 't1', 
-      studentId: 's1', 
-      score: 255, 
-      maxScore: 300, 
-      rank: 3, 
-      grade: 'A',
-      subjectBreakdown: {
-        'Physics': { score: 90, maxScore: 100 },
-        'Chemistry': { score: 75, maxScore: 100 },
-        'Mathematics': { score: 90, maxScore: 100 }
-      }
-    },
-    { 
-      testId: 't2', 
-      studentId: 's1', 
-      score: 276, 
-      maxScore: 300, 
-      rank: 1, 
-      grade: 'A+',
-      subjectBreakdown: {
-        'Physics': { score: 95, maxScore: 100 },
-        'Chemistry': { score: 88, maxScore: 100 },
-        'Mathematics': { score: 93, maxScore: 100 }
-      }
-    },
-];
+// Cleared dummy results
+export const STUDENT_RESULTS: TestResult[] = [];
 
-export let ALL_RESULTS: TestResult[] = [
-    { 
-      testId: 't1', 
-      studentId: 's1', 
-      score: 255, 
-      maxScore: 300, 
-      rank: 3, 
-      grade: 'A',
-      subjectBreakdown: {
-        'Physics': { score: 90, maxScore: 100 },
-        'Chemistry': { score: 75, maxScore: 100 },
-        'Mathematics': { score: 90, maxScore: 100 }
-      }
-    },
-    { testId: 't1', studentId: 's2', score: 234, maxScore: 300, rank: 4, grade: 'B' },
-    { testId: 't1', studentId: 's3', score: 273, maxScore: 300, rank: 1, grade: 'A+' },
-    { testId: 't1', studentId: 's4', score: 264, maxScore: 300, rank: 2, grade: 'A' },
-    { 
-      testId: 't2', 
-      studentId: 's1', 
-      score: 276, 
-      maxScore: 300, 
-      rank: 1, 
-      grade: 'A+',
-       subjectBreakdown: {
-        'Physics': { score: 95, maxScore: 100 },
-        'Chemistry': { score: 88, maxScore: 100 },
-        'Mathematics': { score: 93, maxScore: 100 }
-      }
-    },
-    { testId: 't2', studentId: 's2', score: 243, maxScore: 300, rank: 3, grade: 'A' },
-    { testId: 't2', studentId: 's3', score: 225, maxScore: 300, rank: 4, grade: 'B' },
-    { testId: 't2', studentId: 's4', score: 267, maxScore: 300, rank: 2, grade: 'A' },
-];
-
+export let ALL_RESULTS: TestResult[] = [];
 
 export const STUDENT_PAYMENTS: Payment[] = [
     { id: 'p1', date: '2024-08-01', amount: 5000, status: 'Paid' },

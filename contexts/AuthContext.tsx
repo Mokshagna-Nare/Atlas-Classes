@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { User } from '../types';
 import { createClient } from '@supabase/supabase-js';
 
-// Configuration: Usually loaded from environment variables
+// Configuration: Placeholder for future integration
 const supabase = createClient(
   'https://YOUR_PROJECT_URL.supabase.co',
   'YOUR_ANON_KEY'
@@ -22,92 +22,59 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Load user from local storage on mount (Local Session)
   useEffect(() => {
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        // Fetch custom profile data (role, instituteId)
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', session.user.id)
-          .single();
-
-        setUser({
-          id: session.user.id,
-          name: profile?.name || session.user.user_metadata.name,
-          role: profile?.role || 'student',
-          instituteId: profile?.institute_id
-        });
-      } else {
-        setUser(null);
-      }
-      setIsLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    const savedUser = localStorage.getItem('atlas-user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
   }, []);
 
   const login = async (credentials: any, role: string) => {
     setIsLoading(true);
     setError(null);
-    try {
-      const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email: credentials.email,
-        password: credentials.password,
-      });
+    
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 800));
 
-      if (authError) throw authError;
+    const { email, password } = credentials;
 
-      // Verify role after login
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', data.user.id)
-        .single();
+    // Dummy Credentials Logic
+    let authenticatedUser: User | null = null;
 
-      if (profile?.role !== role && role !== 'any') {
-        await supabase.auth.signOut();
-        throw new Error(`Unauthorized. This login is for ${role}s only.`);
-      }
-    } catch (err: any) {
-      setError(err.message);
-      throw err;
-    } finally {
+    if (email === 'admin@atlas.com' && password === 'password' && (role === 'admin' || role === 'any')) {
+      authenticatedUser = { id: 'admin-1', name: 'Global Administrator', role: 'admin' };
+    } else if (email === 'institute@atlas.com' && password === 'password' && (role === 'institute' || role === 'any')) {
+      authenticatedUser = { id: 'i1', name: 'ABC International School', role: 'institute' };
+    } else if (email === 'student@atlas.com' && password === 'password' && (role === 'student' || role === 'any')) {
+      authenticatedUser = { id: 's1', name: 'Riya Sharma', role: 'student', instituteId: 'i1' };
+    }
+
+    if (authenticatedUser) {
+      setUser(authenticatedUser);
+      localStorage.setItem('atlas-user', JSON.stringify(authenticatedUser));
       setIsLoading(false);
+    } else {
+      setIsLoading(false);
+      const err = `Invalid credentials for ${role} login. Use password 'password'.`;
+      setError(err);
+      throw new Error(err);
     }
   };
 
   const signup = async (userData: any) => {
     setIsLoading(true);
-    setError(null);
-    try {
-      const { error: authError } = await supabase.auth.signUp({
-        email: userData.email,
-        password: userData.password,
-        options: {
-          data: {
-            name: userData.name,
-            role: userData.role,
-            institute_id: userData.instituteId
-          }
-        }
-      });
-      if (authError) throw authError;
-    } catch (err: any) {
-      setError(err.message);
-      throw err;
-    } finally {
-      setIsLoading(false);
-    }
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Simulate successful signup
+    setIsLoading(false);
   };
 
-  const logout = async () => {
-    await supabase.auth.signOut();
+  const logout = () => {
     setUser(null);
+    localStorage.removeItem('atlas-user');
   };
 
   return (

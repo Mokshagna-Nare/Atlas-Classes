@@ -25,12 +25,10 @@ const AIPaperGenerator: React.FC = () => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
-            // Check for HTML extension or MIME type
             if (file.type === 'text/html' || file.name.endsWith('.html') || file.name.endsWith('.htm')) {
                 setHtmlFile(file);
                 setFilePreviewName(file.name);
                 setError('');
-                // Reset previous generations when new file selected
                 setGeneratedQuestions(null);
             } else {
                 setError('Please upload a valid HTML file (.html, .htm).');
@@ -43,9 +41,7 @@ const AIPaperGenerator: React.FC = () => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsText(file);
-            reader.onload = () => {
-                resolve(reader.result as string);
-            };
+            reader.onload = () => resolve(reader.result as string);
             reader.onerror = error => reject(error);
         });
     };
@@ -64,19 +60,19 @@ const AIPaperGenerator: React.FC = () => {
 
         try {
             const htmlContent = await fileToText(htmlFile);
+            // Calling our Gemini Service (which should be connected to a real Gemini implementation or backend)
             const result = await convertHtmlToTest(htmlContent);
             
             if (!result.questions || result.questions.length === 0) {
-                throw new Error("No questions detected. Please check if the HTML file contains text.");
+                throw new Error("No questions detected by AI engine.");
             }
 
             setGeneratedQuestions(result.questions);
             setGeneratedTitle(result.testTitle || filePreviewName.replace(/\.html?$/, ''));
-            setGeneratedSubject(result.subject || 'Mixed');
+            setGeneratedSubject(result.subject || 'General');
         } catch (err: any) {
             console.error(err);
-            const errorMessage = err.message || 'Failed to process request.';
-            setError(`Error: ${errorMessage}`);
+            setError(`Extraction Error: ${err.message || 'The AI could not parse this document.'}`);
         }
         setIsLoading(false);
     };
@@ -84,165 +80,155 @@ const AIPaperGenerator: React.FC = () => {
     const handleSaveAsTest = () => {
         if (!generatedQuestions) return;
         if (!targetInstituteId) {
-            alert('Please select an institute to assign this test to.');
+            alert('Please select an institute to assign this test.');
             return;
         }
 
-        const selectedInstituteName = institutes.find(i => i.id === targetInstituteId)?.name || 'Institute';
+        const selectedInstituteName = institutes.find(i => i.id === targetInstituteId)?.name || 'Target Institute';
 
         const newTest: Test = {
-            id: `t${Date.now()}`,
+            id: `t-ai-${Date.now()}`,
             title: generatedTitle,
             subject: generatedSubject,
             date: new Date().toISOString().split('T')[0],
             status: 'Upcoming',
             instituteId: targetInstituteId,
-            pdfFileName: filePreviewName, // Keeping key name for compatibility, storing HTML filename
-            questions: generatedQuestions
+            pdfFileName: filePreviewName,
+            questions: generatedQuestions,
+            duration: 60
         };
 
         addTest(newTest);
         alert(`Test successfully created and assigned to ${selectedInstituteName}!`);
         
-        // Reset
+        // Reset local state
         setGeneratedQuestions(null);
         setHtmlFile(null);
         setFilePreviewName('');
     };
 
     return (
-        <div>
-            <div className="flex justify-between items-center mb-6">
+        <div className="animate-fade-in-up">
+            <div className="flex justify-between items-center mb-8">
                  <div>
-                    <h2 className="text-2xl font-bold text-atlas-primary">HTML Exam Converter</h2>
-                    <p className="text-gray-400 text-sm mt-1">Convert HTML document code into interactive tests with AI.</p>
+                    <h2 className="text-3xl font-black text-white">AI Test Generator</h2>
+                    <p className="text-atlas-text-muted text-sm mt-1 uppercase tracking-widest font-bold">Document Digitation Engine</p>
                  </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                {/* Input Panel */}
-                <form onSubmit={handleGenerate} className="md:col-span-4 space-y-6 bg-atlas-black p-6 rounded-2xl border border-gray-800 shadow-xl h-fit">
-                    
-                    {/* Admin: Select Institute */}
-                    <div>
-                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2 flex items-center gap-2">
-                            <UserGroupIcon className="h-4 w-4" />
-                            Assign to Institute
-                        </label>
-                        <select 
-                            value={targetInstituteId} 
-                            onChange={(e) => setTargetInstituteId(e.target.value)} 
-                            className="w-full p-3 bg-atlas-gray border border-gray-600 rounded-xl focus:outline-none focus:border-atlas-primary text-white"
-                        >
-                            {institutes.map(inst => (
-                                <option key={inst.id} value={inst.id}>{inst.name} ({inst.id})</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="border-t border-gray-800 pt-6">
-                        <div className="text-center py-8 border-2 border-dashed border-gray-700 rounded-xl bg-atlas-gray/20 hover:bg-atlas-gray/40 transition-colors">
-                             <DocumentTextIcon className="h-12 w-12 text-atlas-primary mx-auto mb-4" />
-                             <p className="text-gray-300 font-bold mb-2">Upload HTML Paper</p>
-                             <p className="text-gray-500 text-sm mb-6 px-4">Upload the .html file containing the questions.</p>
-                             <label className="inline-block">
-                                <span className="bg-atlas-gray border border-gray-600 text-white font-bold py-2 px-6 rounded-lg cursor-pointer hover:bg-gray-700 hover:border-white transition-all">
-                                    Browse Files
-                                </span>
-                                <input type="file" accept=".html,.htm" onChange={handleFileChange} className="hidden"/>
-                             </label>
-                             {filePreviewName && (
-                                 <div className="mt-4 flex items-center justify-center text-sm text-emerald-400 bg-emerald-900/20 py-2 mx-4 rounded">
-                                     <span className="truncate max-w-[200px]">{filePreviewName}</span>
-                                 </div>
-                             )}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                {/* Control Panel */}
+                <div className="lg:col-span-4 space-y-6">
+                    <form onSubmit={handleGenerate} className="bg-atlas-dark p-6 rounded-3xl border border-gray-800 shadow-xl space-y-6">
+                        
+                        <div>
+                            <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest block mb-3">Target Institution</label>
+                            <select 
+                                value={targetInstituteId} 
+                                onChange={(e) => setTargetInstituteId(e.target.value)} 
+                                className="w-full p-4 bg-atlas-soft border border-gray-700 rounded-xl focus:border-atlas-primary outline-none text-white text-sm"
+                            >
+                                {institutes.map(inst => (
+                                    <option key={inst.id} value={inst.id}>{inst.name}</option>
+                                ))}
+                            </select>
                         </div>
-                    </div>
 
-                    <button type="submit" disabled={isLoading} className="w-full flex justify-center items-center space-x-2 bg-gradient-to-r from-atlas-primary to-emerald-600 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-emerald-900/50 hover:shadow-emerald-900/70 hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
-                        {isLoading ? (
-                             <span className="animate-pulse">Processing...</span>
-                        ) : (
-                            <>
-                                <SparklesIcon className="h-5 w-5" />
-                                <span>Extract & Create Test</span>
-                            </>
-                        )}
-                    </button>
-                    {error && <p className="text-red-400 text-sm mt-2 text-center bg-red-900/20 p-2 rounded border border-red-900/50">{error}</p>}
-                </form>
+                        <div className="border-t border-gray-800 pt-6">
+                            <div className="text-center py-10 border-2 border-dashed border-gray-800 rounded-2xl bg-atlas-soft/30 group hover:border-atlas-primary/50 transition-all cursor-pointer relative">
+                                 <input type="file" accept=".html,.htm" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-10"/>
+                                 <DocumentTextIcon className="h-12 w-12 text-gray-700 mx-auto mb-4 group-hover:text-atlas-primary transition-colors" />
+                                 <p className="text-gray-400 font-bold text-sm mb-1">{filePreviewName || 'Upload HTML Source'}</p>
+                                 <p className="text-[10px] text-gray-600 uppercase font-black">Click to Browse</p>
+                            </div>
+                        </div>
+
+                        <button 
+                            type="submit" 
+                            disabled={isLoading} 
+                            className="w-full flex justify-center items-center gap-3 bg-atlas-primary py-5 rounded-2xl font-black text-white text-sm uppercase tracking-widest shadow-glow hover:bg-emerald-500 transition-all disabled:opacity-50"
+                        >
+                            {isLoading ? (
+                                <span className="animate-pulse">Extracting Intelligence...</span>
+                            ) : (
+                                <>
+                                    <SparklesIcon className="h-5 w-5" />
+                                    <span>Convert to Test</span>
+                                </>
+                            )}
+                        </button>
+                        {error && <p className="text-red-500 text-[10px] font-bold uppercase tracking-wider text-center bg-red-500/10 p-3 rounded-lg border border-red-500/20">{error}</p>}
+                    </form>
+                </div>
 
                 {/* Preview Panel */}
-                <div className="md:col-span-8 bg-atlas-black p-6 rounded-2xl border border-gray-800 shadow-xl min-h-[600px] flex flex-col">
-                    <div className="flex justify-between items-center mb-6 pb-6 border-b border-gray-800">
-                        <h3 className="text-xl font-bold text-white">Test Preview</h3>
+                <div className="lg:col-span-8 bg-atlas-dark/30 p-8 rounded-3xl border border-gray-800 shadow-2xl min-h-[600px] flex flex-col backdrop-blur-sm">
+                    <div className="flex justify-between items-center mb-8 pb-8 border-b border-gray-800">
+                        <h3 className="text-xl font-black text-white">Live Extraction Preview</h3>
                         {generatedQuestions && (
                             <button 
                                 onClick={handleSaveAsTest}
-                                className="flex items-center space-x-2 bg-white text-black font-bold py-2 px-5 rounded-lg hover:bg-gray-200 transition-colors shadow-glow animate-pulse-slow"
+                                className="flex items-center gap-2 bg-white text-atlas-dark font-black py-3 px-6 rounded-xl hover:bg-atlas-primary hover:text-white transition-all shadow-glow active:scale-95 text-xs uppercase tracking-widest"
                             >
-                                <span>Confirm & Assign</span>
+                                <span>Finalize & Assign</span>
                                 <ArrowRightIcon className="h-4 w-4" />
                             </button>
                         )}
                     </div>
                     
-                    <div className="flex-grow overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="flex-grow overflow-y-auto pr-2 custom-scrollbar space-y-6">
                         {isLoading ? (
-                            <div className="h-full flex flex-col items-center justify-center text-gray-500 space-y-4">
-                                <div className="w-16 h-16 border-4 border-atlas-primary border-t-transparent rounded-full animate-spin"></div>
-                                <p className="animate-pulse text-lg">Parsing HTML & Generating Diagrams...</p>
+                            <div className="h-full flex flex-col items-center justify-center text-gray-500 space-y-6">
+                                <div className="w-20 h-20 border-4 border-atlas-primary border-t-transparent rounded-full animate-spin shadow-glow"></div>
+                                <p className="animate-pulse font-black text-xs uppercase tracking-widest">Generating Digital Diagrams & Mapping Questions...</p>
                             </div>
                         ) : !generatedQuestions ? (
-                            <div className="h-full flex flex-col items-center justify-center text-gray-600 opacity-50">
-                                <DocumentTextIcon className="h-24 w-24 mb-4" />
-                                <p className="text-lg">Generated content will appear here.</p>
+                            <div className="h-full flex flex-col items-center justify-center text-gray-700 opacity-40">
+                                <DocumentTextIcon className="h-24 w-24 mb-6" />
+                                <p className="text-xs uppercase font-black tracking-[0.2em]">Awaiting Source Material</p>
                             </div>
                         ) : (
-                            <div className="space-y-6 animate-fade-in-up">
-                                <div className="text-center mb-8">
-                                    <h2 className="text-3xl font-bold text-white mb-2">{generatedTitle}</h2>
-                                    <div className="flex justify-center gap-2">
-                                        <span className="inline-block bg-atlas-gray px-3 py-1 rounded-full text-xs text-gray-400 uppercase tracking-widest">{generatedSubject}</span>
-                                        <span className="inline-block bg-atlas-primary/20 px-3 py-1 rounded-full text-xs text-atlas-primary uppercase tracking-widest">{generatedQuestions.length} Questions</span>
+                            <div className="space-y-8 animate-fade-in-up">
+                                <div className="text-center bg-atlas-soft/50 p-8 rounded-3xl border border-gray-800">
+                                    <h2 className="text-4xl font-black text-white mb-3">{generatedTitle}</h2>
+                                    <div className="flex justify-center gap-3">
+                                        <span className="bg-atlas-primary/20 text-atlas-primary px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">{generatedSubject}</span>
+                                        <span className="bg-gray-800 text-gray-400 px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest">{generatedQuestions.length} Items</span>
                                     </div>
                                 </div>
+                                
                                 {generatedQuestions.map((q, index) => (
-                                    <div key={index} className="bg-atlas-gray/40 p-6 rounded-xl border border-gray-700/50 hover:border-atlas-primary/30 transition-colors">
-                                        <div className="flex justify-between items-start mb-3">
-                                            <span className="bg-atlas-black text-atlas-primary font-bold w-8 h-8 flex items-center justify-center rounded-lg text-sm">{index + 1}</span>
-                                            <span className="text-xs text-gray-500 uppercase tracking-wider">{q.type}</span>
+                                    <div key={index} className="bg-atlas-soft/20 p-8 rounded-3xl border border-gray-800/50 hover:border-atlas-primary/30 transition-all group">
+                                        <div className="flex justify-between items-start mb-6">
+                                            <div className="flex items-center gap-3">
+                                                <span className="bg-atlas-dark text-atlas-primary font-black w-10 h-10 flex items-center justify-center rounded-xl border border-gray-700 text-sm">{index + 1}</span>
+                                                <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Section: {q.type}</span>
+                                            </div>
                                         </div>
-                                        <p className="text-lg text-gray-200 font-medium mb-4">{q.question}</p>
+                                        <p className="text-xl text-gray-200 font-bold mb-8 leading-relaxed">{q.question}</p>
                                         
-                                        {/* SVG Diagram Rendering */}
-                                        {q.diagramSvg ? (
-                                             <div className="mb-6 p-4 bg-white rounded-lg flex items-center justify-center border border-gray-600">
+                                        {q.diagramSvg && (
+                                             <div className="mb-8 p-6 bg-white rounded-2xl flex items-center justify-center border border-gray-700 shadow-inner">
                                                  <div 
                                                     className="w-full max-w-sm"
                                                     dangerouslySetInnerHTML={{ __html: q.diagramSvg }} 
                                                  />
                                              </div>
-                                        ) : q.diagramDescription ? (
-                                            <div className="mb-4 p-4 bg-black/40 border border-dashed border-gray-600 rounded-lg text-gray-400 text-sm italic flex items-center gap-3">
-                                                 <CodeBracketIcon className="h-5 w-5" />
-                                                 <span>[Diagram: {q.diagramDescription}]</span>
-                                            </div>
-                                        ) : null}
+                                        )}
 
-                                        {q.type === 'Multiple Choice' && q.options && (
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                                        {q.options && (
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 {q.options.map((opt, i) => (
-                                                    <div key={i} className={`p-3 rounded-lg border text-sm ${opt === q.answer ? 'bg-green-900/20 border-green-500/50 text-green-300' : 'bg-atlas-black border-gray-700 text-gray-400'}`}>
-                                                        <span className="font-bold mr-2">{String.fromCharCode(65 + i)}.</span> {opt}
+                                                    <div key={i} className={`p-5 rounded-2xl border text-sm font-medium transition-all ${opt === q.answer ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400' : 'bg-atlas-dark/50 border-gray-800 text-gray-500'}`}>
+                                                        <span className="font-black mr-3 opacity-50">{String.fromCharCode(65 + i)}</span> {opt}
                                                     </div>
                                                 ))}
                                             </div>
                                         )}
                                         
-                                        <div className="flex items-center gap-2 text-sm mt-4 pt-4 border-t border-gray-700/50">
-                                            <span className="text-gray-500 font-bold">Answer:</span>
-                                            <span className="text-emerald-400 font-mono">{q.answer}</span>
+                                        <div className="mt-8 pt-6 border-t border-gray-800 flex items-center gap-3">
+                                            <span className="text-[10px] font-black text-gray-600 uppercase tracking-widest">Correct Response</span>
+                                            <span className="text-sm font-black text-atlas-primary">{q.answer}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -252,23 +238,10 @@ const AIPaperGenerator: React.FC = () => {
                 </div>
             </div>
             <style>{`
-                .custom-scrollbar::-webkit-scrollbar {
-                    width: 6px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-track {
-                    background: rgba(255, 255, 255, 0.02);
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb {
-                    background: rgba(255, 255, 255, 0.1);
-                    border-radius: 10px;
-                }
-                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                    background: rgba(16, 185, 129, 0.5);
-                }
-                svg {
-                    max-width: 100%;
-                    height: auto;
-                }
+                .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--brand-accent); }
             `}</style>
         </div>
     );

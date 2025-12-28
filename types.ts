@@ -6,14 +6,12 @@ export interface User {
   instituteId?: string;
 }
 
-// Added Course interface to resolve export error
 export interface Course {
   id: number;
   title: string;
   description: string;
 }
 
-// Added FacultyMember interface to resolve export error
 export interface FacultyMember {
   id: number;
   name: string;
@@ -23,7 +21,6 @@ export interface FacultyMember {
   bio: string;
 }
 
-// Added Testimonial interface to resolve export error
 export interface Testimonial {
   id: number;
   quote: string;
@@ -32,7 +29,6 @@ export interface Testimonial {
   rating: number;
 }
 
-// Added Student interface to resolve export error
 export interface Student {
   id: string;
   name: string;
@@ -50,7 +46,7 @@ export interface AdminQuestionPaper {
   subject: 'Physics' | 'Chemistry' | 'Botany' | 'Zoology';
   fileName: string;
   accessibleInstituteIds: string[];
-  fileContent: string; // Base64 encoded file content
+  fileContent: string; 
   mimeType: string;
 }
 
@@ -68,6 +64,7 @@ export interface MCQ extends Question {
 export interface Question {
   id?: string;
   question: string;
+  subject?: string;
   type: 'Multiple Choice' | 'Short Answer' | 'True/False';
   options?: string[];
   answer: string;
@@ -88,26 +85,6 @@ export interface Test {
     duration?: number;
 }
 
-// Backend-aligned Attempt structures
-export interface TestAttempt {
-    id: string;
-    testId: string;
-    studentId: string;
-    startedAt: string;
-    completedAt?: string;
-    status: 'in_progress' | 'completed' | 'expired';
-    score: number;
-    maxScore: number;
-    rank?: number;
-    answers?: AttemptAnswer[];
-}
-
-export interface AttemptAnswer {
-    questionIndex: number;
-    selectedOption: string;
-    isCorrect: boolean;
-}
-
 export interface TestResult {
     testId: string;
     studentId: string;
@@ -115,7 +92,10 @@ export interface TestResult {
     maxScore: number;
     rank: number;
     grade: 'A+' | 'A' | 'B' | 'C' | 'D';
-    subjectBreakdown?: {
+    correctCount: number;
+    wrongCount: number;
+    unattemptedCount: number;
+    subjectBreakdown: {
       [subject: string]: {
         score: number;
         maxScore: number;

@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { LogoutIcon, MenuIcon, XIcon } from '../../../components/icons';
+import { LogoutIcon, MenuIcon, XIcon, ChartBarIcon, ClipboardCheckIcon, UserIcon, CreditCardIcon } from '../../../components/icons';
 import Tests from './components/Tests';
 import Results from './components/Results';
 import Fees from './components/Fees';
 import Profile from './components/Profile';
+import Analytics from './components/Analytics';
 
-type DashboardView = 'profile' | 'tests' | 'results' | 'fees';
+type DashboardView = 'profile' | 'tests' | 'results' | 'analytics' | 'fees';
 
 const StudentDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -26,22 +27,24 @@ const StudentDashboard: React.FC = () => {
       case 'profile': return <Profile />;
       case 'tests': return <Tests />;
       case 'results': return <Results />;
+      case 'analytics': return <Analytics />;
       case 'fees': return <Fees />;
       default: return <Profile />;
     }
   };
 
-  const NavItem: React.FC<{ view: DashboardView, label: string }> = ({ view, label }) => (
+  const NavItem: React.FC<{ view: DashboardView, label: string, icon: React.ReactNode }> = ({ view, label, icon }) => (
     <button
       onClick={() => {
         setActiveView(view);
         setIsSidebarOpen(false);
       }}
-      className={`w-full text-left px-4 py-3 rounded-md transition-colors ${
+      className={`w-full text-left px-4 py-3 rounded-md transition-colors flex items-center space-x-3 ${
         activeView === view ? 'bg-green-900/30 text-atlas-green font-bold border-l-4 border-atlas-green' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
       }`}
     >
-      {label}
+      {icon}
+      <span>{label}</span>
     </button>
   );
 
@@ -67,10 +70,11 @@ const StudentDashboard: React.FC = () => {
             </button>
         </div>
         <nav className="flex-grow space-y-2">
-            <NavItem view="profile" label="My Profile" />
-            <NavItem view="tests" label="My Tests" />
-            <NavItem view="results" label="My Results" />
-            <NavItem view="fees" label="My Fees" />
+            <NavItem view="profile" label="My Profile" icon={<UserIcon className="h-5 w-5" />} />
+            <NavItem view="tests" label="My Tests" icon={<ClipboardCheckIcon className="h-5 w-5" />} />
+            <NavItem view="results" label="My Results" icon={<ChartBarIcon className="h-5 w-5" />} />
+            <NavItem view="analytics" label="My Analytics" icon={<ChartBarIcon className="h-5 w-5" />} />
+            <NavItem view="fees" label="My Fees" icon={<CreditCardIcon className="h-5 w-5" />} />
         </nav>
         <div className="mt-auto">
           <button onClick={handleLogout} className="w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-md bg-gray-800 hover:bg-red-900/30 text-gray-300 hover:text-red-400 transition-colors">
@@ -84,11 +88,11 @@ const StudentDashboard: React.FC = () => {
           <button onClick={() => setIsSidebarOpen(true)} className="text-gray-300 p-1">
             <MenuIcon className="h-6 w-6" />
           </button>
-           <h1 className="text-xl font-bold truncate text-white">Welcome, {user?.name}</h1>
+           <h1 className="text-xl font-bold truncate text-white">Hello, {user?.name}</h1>
         </header>
         <header className="hidden md:block mb-8">
-          <h1 className="text-3xl font-bold text-white">Welcome, {user?.name}</h1>
-          <p className="text-gray-500">Your personal academic dashboard.</p>
+          <h1 className="text-3xl font-bold text-white">Student Academic Center</h1>
+          <p className="text-gray-500">Track your progress and excel in your exams.</p>
         </header>
         <div className="bg-atlas-soft p-4 sm:p-6 rounded-lg shadow-sm border border-gray-800">
           {renderContent()}

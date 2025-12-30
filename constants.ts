@@ -41,14 +41,13 @@ export const INSTITUTE_STUDENTS: Student[] = [
 ];
 
 export const STUDENT_TESTS: Test[] = [
-  { id: 't1', title: 'Unit Test 1: Physics & Math', subject: 'Mixed', date: '2024-08-15', status: 'Completed', instituteId: 'i1', duration: 60 },
-  { id: 't2', title: 'Unit Test 2: Chemistry Focus', subject: 'Chemistry', date: '2024-08-28', status: 'Completed', instituteId: 'i1', duration: 60 },
-  { id: 't3', title: 'Monthly Cumulative Exam', subject: 'PCM', date: '2024-09-10', status: 'Completed', instituteId: 'i1', duration: 90 },
-  { id: 't4', title: 'Advanced Mock Test', subject: 'JEE-Pattern', date: '2024-09-25', status: 'Completed', instituteId: 'i1', duration: 180 },
-  { id: 't5', title: 'Upcoming Revision Test', subject: 'Mechanics', date: '2024-10-05', status: 'Upcoming', instituteId: 'i1', duration: 60 },
+  { id: 't1', title: 'Weekly Test - Physics & Math', subject: 'JEE-Prep', date: '2024-08-15', status: 'Completed', instituteId: 'i1', duration: 60 },
+  { id: 't2', title: 'Monthly Cumulative: Biology Focus', subject: 'NEET-Prep', date: '2024-08-28', status: 'Completed', instituteId: 'i1', duration: 90 },
+  { id: 't3', title: 'JEE Unit Test: Calculus & Mechanics', subject: 'JEE-Main', date: '2024-09-10', status: 'Completed', instituteId: 'i1', duration: 180 },
+  { id: 't4', title: 'Grand Mock Test - PCM/B', subject: 'JEE-Advanced', date: '2024-09-25', status: 'Completed', instituteId: 'i1', duration: 180 },
+  { id: 't5', title: 'Upcoming Weekly Test', subject: 'Organic Chemistry', date: '2024-10-05', status: 'Upcoming', instituteId: 'i1', duration: 60 },
 ];
 
-// Rich analytics data for "perfect accuracy" in visualization
 export const STUDENT_RESULTS: TestResult[] = [
   {
     testId: 't1', studentId: 's1', score: 68, maxScore: 100, rank: 3, grade: 'B', correctCount: 17, wrongCount: 3, unattemptedCount: 5,
@@ -56,7 +55,7 @@ export const STUDENT_RESULTS: TestResult[] = [
   },
   {
     testId: 't2', studentId: 's1', score: 82, maxScore: 100, rank: 2, grade: 'A', correctCount: 20, wrongCount: 2, unattemptedCount: 3,
-    subjectBreakdown: { 'Chemistry': { score: 82, maxScore: 100 } }
+    subjectBreakdown: { 'Biology': { score: 45, maxScore: 50 }, 'Chemistry': { score: 37, maxScore: 50 } }
   },
   {
     testId: 't3', studentId: 's1', score: 240, maxScore: 300, rank: 1, grade: 'A+', correctCount: 60, wrongCount: 5, unattemptedCount: 10,
@@ -68,10 +67,8 @@ export const STUDENT_RESULTS: TestResult[] = [
   }
 ];
 
-// Aggregate results for Institute Dashboard
 export const ALL_RESULTS: TestResult[] = [
   ...STUDENT_RESULTS,
-  // Other students' data to show bell curve distribution
   { testId: 't4', studentId: 's2', score: 210, maxScore: 300, rank: 5, grade: 'B', correctCount: 55, wrongCount: 10, unattemptedCount: 10, subjectBreakdown: {} },
   { testId: 't4', studentId: 's3', score: 180, maxScore: 300, rank: 10, grade: 'C', correctCount: 45, wrongCount: 15, unattemptedCount: 15, subjectBreakdown: {} },
   { testId: 't4', studentId: 's4', score: 285, maxScore: 300, rank: 2, grade: 'A+', correctCount: 72, wrongCount: 2, unattemptedCount: 1, subjectBreakdown: {} },

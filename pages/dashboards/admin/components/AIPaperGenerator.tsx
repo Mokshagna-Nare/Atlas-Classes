@@ -86,6 +86,7 @@ const AIPaperGenerator: React.FC = () => {
 
         const selectedInstituteName = institutes.find(i => i.id === targetInstituteId)?.name || 'Target Institute';
 
+        // Fix: Added missing required 'batch' property to satisfy Test interface
         const newTest: Test = {
             id: `t-ai-${Date.now()}`,
             title: generatedTitle,
@@ -93,6 +94,7 @@ const AIPaperGenerator: React.FC = () => {
             date: new Date().toISOString().split('T')[0],
             status: 'Upcoming',
             instituteId: targetInstituteId,
+            batch: 'COMPASS', // Default batch assignment
             pdfFileName: filePreviewName,
             questions: generatedQuestions,
             duration: 60

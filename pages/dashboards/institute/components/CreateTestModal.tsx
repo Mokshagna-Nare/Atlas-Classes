@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useData } from '../../../../contexts/DataContext';
 import { useAuth } from '../../../../contexts/AuthContext';
@@ -64,11 +65,13 @@ const CreateTestModal: React.FC<CreateTestModalProps> = ({ onClose, testToEdit }
             };
             editTest(updatedTest);
         } else {
+            // Fix: Added missing required 'batch' property to satisfy Test interface
             const newTest: Test = {
                 id: `t${Date.now()}`,
                 title,
                 subject,
                 date,
+                batch: 'COMPASS', // Default batch assignment
                 pdfFileName: pdfFile!.name,
                 status: 'Upcoming',
                 instituteId: user!.id,

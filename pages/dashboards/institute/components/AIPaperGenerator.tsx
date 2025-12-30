@@ -82,6 +82,7 @@ const AIPaperGenerator: React.FC = () => {
     const handleSaveAsTest = () => {
         if (!generatedQuestions) return;
 
+        // Fix: Added missing required 'batch' property to satisfy Test interface
         const newTest: Test = {
             id: `t${Date.now()}`,
             title: generatedTitle,
@@ -89,6 +90,7 @@ const AIPaperGenerator: React.FC = () => {
             date: new Date().toISOString().split('T')[0],
             status: 'Upcoming',
             instituteId: user!.id,
+            batch: 'COMPASS', // Default batch assignment
             pdfFileName: filePreviewName, // Keeping for record
             questions: generatedQuestions
         };

@@ -4,6 +4,7 @@ export interface User {
   name: string;
   role: 'institute' | 'student' | 'admin';
   instituteId?: string;
+  batch?: 'COMPASS' | 'AXIS' | 'NEXUS';
 }
 
 export interface Course {
@@ -33,6 +34,7 @@ export interface Student {
   id: string;
   name: string;
   instituteId: string;
+  batch?: 'COMPASS' | 'AXIS' | 'NEXUS';
 }
 
 export interface Institute {
@@ -80,6 +82,7 @@ export interface Test {
     status: 'Upcoming' | 'Completed' | 'Assigned';
     instituteId: string;
     subject: string;
+    batch: 'COMPASS' | 'AXIS' | 'NEXUS';
     pdfFileName?: string;
     questions?: Question[];
     duration?: number;
@@ -91,6 +94,7 @@ export interface TestResult {
     score: number;
     maxScore: number;
     rank: number;
+    totalStudents: number;
     grade: 'A+' | 'A' | 'B' | 'C' | 'D';
     correctCount: number;
     wrongCount: number;

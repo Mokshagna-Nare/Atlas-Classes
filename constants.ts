@@ -33,46 +33,57 @@ export const INSTITUTES_DATA: Institute[] = [
 ];
 
 export const INSTITUTE_STUDENTS: Student[] = [
-  { id: 's1', name: 'Riya Sharma', instituteId: 'i1' },
-  { id: 's2', name: 'Aryan Khan', instituteId: 'i1' },
-  { id: 's3', name: 'Zoya Verma', instituteId: 'i1' },
-  { id: 's4', name: 'Ishaan Gupta', instituteId: 'i1' },
-  { id: 's5', name: 'Ananya Roy', instituteId: 'i1' },
+  { id: 's1', name: 'Riya Sharma', instituteId: 'i1', batch: 'COMPASS' },
+  { id: 's2', name: 'Aryan Khan', instituteId: 'i1', batch: 'COMPASS' },
+  { id: 's3', name: 'Zoya Verma', instituteId: 'i1', batch: 'AXIS' },
+  { id: 's4', name: 'Ishaan Gupta', instituteId: 'i1', batch: 'COMPASS' },
+  { id: 's5', name: 'Ananya Roy', instituteId: 'i1', batch: 'NEXUS' },
 ];
 
 export const STUDENT_TESTS: Test[] = [
-  { id: 't1', title: 'Weekly Test - Physics & Math', subject: 'JEE-Prep', date: '2024-08-15', status: 'Completed', instituteId: 'i1', duration: 60 },
-  { id: 't2', title: 'Monthly Cumulative: Biology Focus', subject: 'NEET-Prep', date: '2024-08-28', status: 'Completed', instituteId: 'i1', duration: 90 },
-  { id: 't3', title: 'JEE Unit Test: Calculus & Mechanics', subject: 'JEE-Main', date: '2024-09-10', status: 'Completed', instituteId: 'i1', duration: 180 },
-  { id: 't4', title: 'Grand Mock Test - PCM/B', subject: 'JEE-Advanced', date: '2024-09-25', status: 'Completed', instituteId: 'i1', duration: 180 },
-  { id: 't5', title: 'Upcoming Weekly Test', subject: 'Organic Chemistry', date: '2024-10-05', status: 'Upcoming', instituteId: 'i1', duration: 60 },
+  { id: 't1', title: 'COMPASS - Weekly Test 1', subject: 'Math & Physics', batch: 'COMPASS', date: '2024-08-05', status: 'Completed', instituteId: 'i1', duration: 60 },
+  { id: 't2', title: 'COMPASS - Monthly Cumulative Aug', subject: 'PCM', batch: 'COMPASS', date: '2024-08-25', status: 'Completed', instituteId: 'i1', duration: 180 },
+  { id: 't3', title: 'COMPASS - Unit Test: Kinematics', subject: 'Physics', batch: 'COMPASS', date: '2024-09-05', status: 'Completed', instituteId: 'i1', duration: 60 },
+  { id: 't4', title: 'COMPASS - Mock Exam: JEE Main', subject: 'PCM', batch: 'COMPASS', date: '2024-09-20', status: 'Completed', instituteId: 'i1', duration: 180 },
+  { id: 't5', title: 'COMPASS - Upcoming Revision', subject: 'Chemistry', batch: 'COMPASS', date: '2024-10-05', status: 'Upcoming', instituteId: 'i1', duration: 60 },
 ];
 
 export const STUDENT_RESULTS: TestResult[] = [
   {
-    testId: 't1', studentId: 's1', score: 68, maxScore: 100, rank: 3, grade: 'B', correctCount: 17, wrongCount: 3, unattemptedCount: 5,
-    subjectBreakdown: { 'Physics': { score: 35, maxScore: 50 }, 'Mathematics': { score: 33, maxScore: 50 } }
+    testId: 't1', studentId: 's1', score: 85, maxScore: 100, rank: 2, totalStudents: 25, grade: 'A', correctCount: 22, wrongCount: 3, unattemptedCount: 0,
+    subjectBreakdown: { 
+        'Mathematics': { score: 48, maxScore: 50 }, 
+        'Physics': { score: 37, maxScore: 50 } 
+    }
   },
   {
-    testId: 't2', studentId: 's1', score: 82, maxScore: 100, rank: 2, grade: 'A', correctCount: 20, wrongCount: 2, unattemptedCount: 3,
-    subjectBreakdown: { 'Biology': { score: 45, maxScore: 50 }, 'Chemistry': { score: 37, maxScore: 50 } }
+    testId: 't2', studentId: 's1', score: 245, maxScore: 300, rank: 3, totalStudents: 25, grade: 'A', correctCount: 65, wrongCount: 5, unattemptedCount: 5,
+    subjectBreakdown: { 
+        'Physics': { score: 82, maxScore: 100 }, 
+        'Chemistry': { score: 78, maxScore: 100 }, 
+        'Mathematics': { score: 85, maxScore: 100 } 
+    }
   },
   {
-    testId: 't3', studentId: 's1', score: 240, maxScore: 300, rank: 1, grade: 'A+', correctCount: 60, wrongCount: 5, unattemptedCount: 10,
-    subjectBreakdown: { 'Physics': { score: 85, maxScore: 100 }, 'Chemistry': { score: 75, maxScore: 100 }, 'Mathematics': { score: 80, maxScore: 100 } }
+    testId: 't3', studentId: 's1', score: 92, maxScore: 100, rank: 1, totalStudents: 25, grade: 'A+', correctCount: 23, wrongCount: 2, unattemptedCount: 0,
+    subjectBreakdown: { 
+        'Physics': { score: 92, maxScore: 100 } 
+    }
   },
   {
-    testId: 't4', studentId: 's1', score: 265, maxScore: 300, rank: 1, grade: 'A+', correctCount: 68, wrongCount: 4, unattemptedCount: 3,
-    subjectBreakdown: { 'Physics': { score: 95, maxScore: 100 }, 'Chemistry': { score: 85, maxScore: 100 }, 'Mathematics': { score: 85, maxScore: 100 } }
+    testId: 't4', studentId: 's1', score: 275, maxScore: 300, rank: 1, totalStudents: 30, grade: 'A+', correctCount: 70, wrongCount: 2, unattemptedCount: 3,
+    subjectBreakdown: { 
+        'Physics': { score: 95, maxScore: 100 }, 
+        'Chemistry': { score: 88, maxScore: 100 }, 
+        'Mathematics': { score: 92, maxScore: 100 } 
+    }
   }
 ];
 
 export const ALL_RESULTS: TestResult[] = [
   ...STUDENT_RESULTS,
-  { testId: 't4', studentId: 's2', score: 210, maxScore: 300, rank: 5, grade: 'B', correctCount: 55, wrongCount: 10, unattemptedCount: 10, subjectBreakdown: {} },
-  { testId: 't4', studentId: 's3', score: 180, maxScore: 300, rank: 10, grade: 'C', correctCount: 45, wrongCount: 15, unattemptedCount: 15, subjectBreakdown: {} },
-  { testId: 't4', studentId: 's4', score: 285, maxScore: 300, rank: 2, grade: 'A+', correctCount: 72, wrongCount: 2, unattemptedCount: 1, subjectBreakdown: {} },
-  { testId: 't4', studentId: 's5', score: 245, maxScore: 300, rank: 4, grade: 'A', correctCount: 62, wrongCount: 6, unattemptedCount: 7, subjectBreakdown: {} },
+  { testId: 't4', studentId: 's2', score: 210, maxScore: 300, rank: 5, totalStudents: 30, grade: 'B', correctCount: 55, wrongCount: 10, unattemptedCount: 10, subjectBreakdown: {} },
+  { testId: 't4', studentId: 's4', score: 255, maxScore: 300, rank: 2, totalStudents: 30, grade: 'A', correctCount: 64, wrongCount: 3, unattemptedCount: 8, subjectBreakdown: {} },
 ];
 
 export const ADMIN_QUESTION_PAPERS: AdminQuestionPaper[] = [];

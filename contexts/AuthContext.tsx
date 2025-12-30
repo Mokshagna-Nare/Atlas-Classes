@@ -50,7 +50,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } else if (email === 'institute@atlas.com' && password === 'password' && (role === 'institute' || role === 'any')) {
       authenticatedUser = { id: 'i1', name: 'ABC International School', role: 'institute' };
     } else if (email === 'student@atlas.com' && password === 'password' && (role === 'student' || role === 'any')) {
-      authenticatedUser = { id: 's1', name: 'Riya Sharma', role: 'student', instituteId: 'i1' };
+      authenticatedUser = { id: 's1', name: 'Riya Sharma', role: 'student', instituteId: 'i1', batch: 'COMPASS' };
     }
 
     if (authenticatedUser) {

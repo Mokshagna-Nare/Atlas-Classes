@@ -35,12 +35,14 @@ const CreateTest: React.FC = () => {
             { id: 'mq2', question: `Sample ${formData.subject} Question 2`, answer: 'Option B', options: ['Option A', 'Option B', 'Option C', 'Option D'], type: 'Multiple Choice' as const }
         ];
 
+        // Fix: Added missing required 'batch' property to satisfy Test interface
         const localTest: Test = {
             id: `t-online-${Date.now()}`,
             title: formData.testName,
             subject: formData.subject,
             date: formData.startDate ? formData.startDate.split('T')[0] : new Date().toISOString().split('T')[0],
             status: 'Upcoming',
+            batch: 'COMPASS', // Default batch assignment
             instituteId: targetInstituteId,
             questions: finalQuestions,
             duration: parseInt(formData.duration)

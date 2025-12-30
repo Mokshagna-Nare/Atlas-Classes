@@ -95,12 +95,14 @@ const TakeTestPage: React.FC = () => {
         const percentage = (totalScore / maxPossible) * 100;
         const grade = percentage >= 90 ? 'A+' : percentage >= 75 ? 'A' : percentage >= 60 ? 'B' : percentage >= 45 ? 'C' : 'D';
 
+        // Fix: Added missing required 'totalStudents' property to satisfy TestResult interface
         const result: TestResult = {
             testId: testId!,
             studentId: user!.id,
             score: totalScore,
             maxScore: maxPossible,
             rank: 1, // Mock rank
+            totalStudents: 10, // Default mock value
             grade,
             correctCount,
             wrongCount,

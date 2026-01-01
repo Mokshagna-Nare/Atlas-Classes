@@ -114,6 +114,7 @@ const Results: React.FC<ResultsProps> = ({ initialSelectedTestId, onClearSelecti
                                             <Tooltip 
                                                 contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', borderRadius: '15px', padding: '12px' }}
                                                 itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                                                labelStyle={{ color: '#10B981', fontWeight: 'bold' }}
                                             />
                                             <Legend verticalAlign="bottom" height={36} wrapperStyle={{ paddingTop: '20px', color: '#9CA3AF', textTransform: 'uppercase', fontSize: '10px', fontWeight: 'bold' }} />
                                         </PieChart>

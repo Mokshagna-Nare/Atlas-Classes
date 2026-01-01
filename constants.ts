@@ -32,12 +32,13 @@ export const INSTITUTES_DATA: Institute[] = [
   { id: 'i1', name: 'ABC International School', email: 'institute@atlas.com' }
 ];
 
+// Fix: Added missing rollNumber, classId and dob to match Student type
 export const INSTITUTE_STUDENTS: Student[] = [
-  { id: 's1', name: 'Riya Sharma', instituteId: 'i1', batch: 'COMPASS' },
-  { id: 's2', name: 'Aryan Khan', instituteId: 'i1', batch: 'COMPASS' },
-  { id: 's3', name: 'Zoya Verma', instituteId: 'i1', batch: 'AXIS' },
-  { id: 's4', name: 'Ishaan Gupta', instituteId: 'i1', batch: 'COMPASS' },
-  { id: 's5', name: 'Ananya Roy', instituteId: 'i1', batch: 'NEXUS' },
+  { id: 's1', name: 'Riya Sharma', instituteId: 'i1', batch: 'COMPASS', rollNumber: '101', classId: 'c1', dob: '2007-05-12' },
+  { id: 's2', name: 'Aryan Khan', instituteId: 'i1', batch: 'COMPASS', rollNumber: '102', classId: 'c1', dob: '2007-08-20' },
+  { id: 's3', name: 'Zoya Verma', instituteId: 'i1', batch: 'AXIS', rollNumber: '201', classId: 'c2', dob: '2006-11-15' },
+  { id: 's4', name: 'Ishaan Gupta', instituteId: 'i1', batch: 'COMPASS', rollNumber: '103', classId: 'c1', dob: '2007-12-05' },
+  { id: 's5', name: 'Ananya Roy', instituteId: 'i1', batch: 'NEXUS', rollNumber: '301', classId: 'c1', dob: '2007-01-10' },
 ];
 
 export const STUDENT_TESTS: Test[] = [

@@ -7,6 +7,41 @@ export interface User {
   batch?: 'COMPASS' | 'AXIS' | 'NEXUS';
 }
 
+export interface AcademicClass {
+  id: string;
+  name: string;
+  subjects: string[];
+}
+
+export interface WeeklySchedule {
+  id: string;
+  classId: string;
+  weekNumber: number;
+  subject: string;
+  topic: string;
+}
+
+export interface Student {
+  id: string;
+  name: string;
+  rollNumber: string;
+  classId: string;
+  batch: 'COMPASS' | 'AXIS' | 'NEXUS';
+  dob: string;
+  instituteId: string;
+}
+
+export interface TestMark {
+  id: string;
+  testName: string;
+  testId: string;
+  date: string;
+  studentId: string;
+  classId: string;
+  marks: Record<string, number>; // subject -> mark
+  maxMarks: number; // per subject assuming uniform for simplicity or can be Record
+}
+
 export interface Course {
   id: number;
   title: string;
@@ -30,13 +65,6 @@ export interface Testimonial {
   rating: number;
 }
 
-export interface Student {
-  id: string;
-  name: string;
-  instituteId: string;
-  batch?: 'COMPASS' | 'AXIS' | 'NEXUS';
-}
-
 export interface Institute {
   id: string;
   name: string;
@@ -52,17 +80,6 @@ export interface AdminQuestionPaper {
   mimeType: string;
 }
 
-export interface MCQ extends Question {
-  subject: string;
-  topic: string;
-  difficulty: string;
-  marks: number;
-  isFlagged: boolean;
-  flagReason?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface Question {
   id?: string;
   question: string;
@@ -73,6 +90,18 @@ export interface Question {
   explanation?: string;
   diagramDescription?: string;
   diagramSvg?: string;
+}
+
+// Added MCQ interface for admin question bank
+export interface MCQ extends Question {
+  subject: string;
+  topic: string;
+  difficulty: string;
+  marks: number;
+  isFlagged: boolean;
+  flagReason?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Test {

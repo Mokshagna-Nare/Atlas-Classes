@@ -70,11 +70,10 @@ const Analytics: React.FC = () => {
     ];
 
     const tooltipStyle = {
-        backgroundColor: '#0B0F19',
-        borderColor: '#1F2937',
+        backgroundColor: '#111827',
+        borderColor: '#374151',
         borderRadius: '16px',
         padding: '16px',
-        color: '#fff',
         boxShadow: '0 20px 40px -10px rgba(0,0,0,0.7)',
         border: '1px solid rgba(255,255,255,0.05)'
     };
@@ -140,7 +139,7 @@ const Analytics: React.FC = () => {
                                     fill="#10B981"
                                     fillOpacity={0.4}
                                 />
-                                <Tooltip contentStyle={tooltipStyle} itemStyle={{ color: '#fff' }} />
+                                <Tooltip contentStyle={tooltipStyle} itemStyle={{ color: '#fff' }} labelStyle={{ color: '#10B981' }} />
                             </RadarChart>
                         </ResponsiveContainer>
                     </div>
